@@ -23,7 +23,14 @@
         <template #header>
           <div class="card-header">
             <span>设备列表</span>
-            <el-button text type="primary" :loading="machineStore.loading" @click="loadMachines">刷新</el-button>
+            <div class="toolbar-actions">
+              <el-input v-model.trim="filters.keyword" clearable placeholder="搜索编号/型号/位置" />
+              <el-select v-model="filters.status" placeholder="状态">
+                <el-option label="全部状态" value="ALL" />
+                <el-option v-for="item in statuses" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+              <el-button text type="primary" :loading="machineStore.loading" @click="loadMachines">刷新</el-button>
+            </div>
           </div>
         </template>
 
@@ -31,17 +38,26 @@
           v-if="machineStore.loading || machineStore.error || machines.length === 0"
           :loading="machineStore.loading"
           :error="machineStore.error"
-          :empty="machines.length === 0"
+          :empty="filteredMachines.length === 0"
           empty-text="暂无设备数据"
           @retry="loadMachines"
         />
 
-        <el-table v-else :data="machines" height="520">
+        <el-table v-else :data="pagedMachines" height="520">
           <el-table-column prop="machineId" label="农机编号" min-width="150" />
           <el-table-column prop="model" label="型号" min-width="160" />
           <el-table-column prop="status" label="状态" width="120">
             <template #default="{ row }">
-              <el-tag :type="statusType(row.status)">{{ statusLabel(row.status) }}</el-tag>
+              <el-dropdown trigger="click" @command="status => changeMachineStatus(row, status)">
+                <el-tag :type="statusType(row.status)" class="clickable-tag">{{ statusLabel(row.status) }}</el-tag>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item v-for="item in statuses" :key="item.value" :command="item.value">
+                      {{ item.label }}
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
             </template>
           </el-table-column>
           <el-table-column prop="location" label="位置" min-width="180">
@@ -52,23 +68,34 @@
           </el-table-column>
           <el-table-column label="操作" width="210" fixed="right">
             <template #default="{ row }">
+              <el-button size="small" @click="openDetail(row)">详情</el-button>
               <el-button size="small" @click="openEdit(row)">编辑</el-button>
               <el-button size="small" type="danger" @click="removeMachine(row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
+
+        <el-pagination
+          v-if="filteredMachines.length > page.pageSize"
+          v-model:current-page="page.current"
+          v-model:page-size="page.pageSize"
+          class="pager"
+          layout="total, sizes, prev, pager, next"
+          :page-sizes="[10, 20, 50]"
+          :total="filteredMachines.length"
+        />
       </el-card>
     </main>
 
     <el-dialog v-model="dialogVisible" :title="editingId ? '编辑农机' : '新增农机'" width="520px">
       <el-form :model="form" label-width="90px">
-        <el-form-item label="农机编号" required>
+        <el-form-item label="农机编号" required :error="fieldErrors.machineId">
           <el-input v-model.trim="form.machineId" :disabled="Boolean(editingId)" placeholder="例如 HARV-001" />
         </el-form-item>
-        <el-form-item label="型号" required>
+        <el-form-item label="型号" required :error="fieldErrors.model">
           <el-input v-model.trim="form.model" placeholder="例如 雷沃 GM100" />
         </el-form-item>
-        <el-form-item label="状态">
+        <el-form-item label="状态" :error="fieldErrors.status">
           <el-select v-model="form.status">
             <el-option v-for="item in statuses" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
@@ -85,20 +112,37 @@
         <el-button type="primary" :loading="saving" @click="saveMachine">保存</el-button>
       </template>
     </el-dialog>
+
+    <el-dialog v-model="detailVisible" title="设备详情" width="520px">
+      <el-descriptions v-if="selectedMachine" :column="1" border>
+        <el-descriptions-item label="农机编号">{{ selectedMachine.machineId }}</el-descriptions-item>
+        <el-descriptions-item label="型号">{{ selectedMachine.model || '--' }}</el-descriptions-item>
+        <el-descriptions-item label="状态">{{ statusLabel(selectedMachine.status) }}</el-descriptions-item>
+        <el-descriptions-item label="位置">{{ selectedMachine.location || '--' }}</el-descriptions-item>
+        <el-descriptions-item label="最后更新">{{ formatTime(selectedMachine.lastUpdated) }}</el-descriptions-item>
+        <el-descriptions-item label="参数">{{ formatParameters(selectedMachine.parameters) }}</el-descriptions-item>
+      </el-descriptions>
+    </el-dialog>
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import TopNavBar from '../components/layout/TopNavBar.vue'
 import RequestState from '../components/common/RequestState.vue'
 import { useMachineStore } from '../store'
+import { filterMachines, hasErrors, mapServerFieldErrors, paginateRows, validateMachineForm } from '../utils/operationsModel'
 
 const machineStore = useMachineStore()
 const dialogVisible = ref(false)
+const detailVisible = ref(false)
 const editingId = ref('')
 const saving = ref(false)
+const selectedMachine = ref(null)
+const fieldErrors = reactive({})
+const filters = reactive({ keyword: '', status: 'ALL' })
+const page = reactive({ current: 1, pageSize: 10 })
 const form = reactive({
   machineId: '',
   model: '',
@@ -117,6 +161,8 @@ const statuses = [
 ]
 
 const machines = computed(() => machineStore.machines || [])
+const filteredMachines = computed(() => filterMachines(machines.value, filters))
+const pagedMachines = computed(() => paginateRows(filteredMachines.value, { page: page.current, pageSize: page.pageSize }))
 const onlineCount = computed(() => machines.value.filter(item => ['ONLINE', 'WORKING', 'IDLE'].includes(item.status)).length)
 const offlineCount = computed(() => machines.value.filter(item => ['OFFLINE', 'ERROR', 'MAINTENANCE'].includes(item.status)).length)
 
@@ -142,6 +188,7 @@ function formatTime(value) {
 
 function resetForm() {
   Object.assign(form, { machineId: '', model: '', status: 'OFFLINE', location: '', parameters: '' })
+  Object.keys(fieldErrors).forEach(key => delete fieldErrors[key])
 }
 
 function openCreate() {
@@ -162,15 +209,22 @@ function openEdit(machine) {
   dialogVisible.value = true
 }
 
+function openDetail(machine) {
+  selectedMachine.value = machine
+  detailVisible.value = true
+}
+
 async function loadMachines() {
   await machineStore.fetchMachines()
 }
 
 async function saveMachine() {
-  if (!form.machineId || !form.model) {
-    ElMessage.warning('农机编号和型号不能为空')
+  Object.assign(fieldErrors, validateMachineForm(form))
+  if (hasErrors(fieldErrors)) {
+    ElMessage.warning('请修正表单错误')
     return
   }
+  if (saving.value) return
 
   saving.value = true
   try {
@@ -181,9 +235,18 @@ async function saveMachine() {
     }
     dialogVisible.value = false
     ElMessage.success('设备信息已保存')
+  } catch (error) {
+    Object.assign(fieldErrors, mapServerFieldErrors(error))
+    throw error
   } finally {
     saving.value = false
   }
+}
+
+async function changeMachineStatus(machine, status) {
+  if (machine.status === status) return
+  await machineStore.updateMachineStatus(machine.machineId, status)
+  ElMessage.success('设备状态已更新')
 }
 
 async function removeMachine(machine) {
@@ -191,6 +254,15 @@ async function removeMachine(machine) {
   await machineStore.deleteMachine(machine.machineId)
   ElMessage.success('设备已删除')
 }
+
+function formatParameters(value) {
+  if (!value) return '--'
+  return typeof value === 'string' ? value : JSON.stringify(value)
+}
+
+watch(() => [filters.keyword, filters.status], () => {
+  page.current = 1
+})
 
 onMounted(loadMachines)
 </script>

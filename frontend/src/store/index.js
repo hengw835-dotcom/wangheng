@@ -78,19 +78,22 @@ export const useMachineStore = defineStore('machine', {
   state: () => ({
     machines: [],
     loading: false,
-    error: null
+    error: null,
+    requestId: 0
   }),
   actions: {
     async fetchMachines() {
       this.loading = true
+      const requestId = ++this.requestId
       try {
-        this.machines = await machineApi.list()
+        const machines = await machineApi.list()
+        if (requestId === this.requestId) this.machines = machines
         this.error = null
       } catch (error) {
-        this.error = describeApiError(error)
+        if (requestId === this.requestId) this.error = describeApiError(error)
         throw error
       } finally {
-        this.loading = false
+        if (requestId === this.requestId) this.loading = false
       }
     },
     async addMachine(machine) {
@@ -145,19 +148,22 @@ export const useTaskStore = defineStore('task', {
   state: () => ({
     tasks: [],
     loading: false,
-    error: null
+    error: null,
+    requestId: 0
   }),
   actions: {
     async fetchTasks() {
       this.loading = true
+      const requestId = ++this.requestId
       try {
-        this.tasks = await taskApi.list()
+        const tasks = await taskApi.list()
+        if (requestId === this.requestId) this.tasks = tasks
         this.error = null
       } catch (error) {
-        this.error = describeApiError(error)
+        if (requestId === this.requestId) this.error = describeApiError(error)
         throw error
       } finally {
-        this.loading = false
+        if (requestId === this.requestId) this.loading = false
       }
     },
     async createTask(task) {
@@ -174,6 +180,18 @@ export const useTaskStore = defineStore('task', {
     async updateTaskStatus(taskId, status) {
       try {
         const updated = await taskApi.updateStatus(taskId, status)
+        const index = this.tasks.findIndex(task => task.taskId === taskId)
+        if (index !== -1) this.tasks[index] = updated
+        this.error = null
+        return updated
+      } catch (error) {
+        this.error = describeApiError(error)
+        throw error
+      }
+    },
+    async updateTaskProgress(taskId, completedArea) {
+      try {
+        const updated = await taskApi.updateProgress(taskId, completedArea)
         const index = this.tasks.findIndex(task => task.taskId === taskId)
         if (index !== -1) this.tasks[index] = updated
         this.error = null
