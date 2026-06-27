@@ -1,0 +1,30 @@
+:root {
+  --bg-primary: #0a1628;
+  --bg-secondary: #0d1f3c;
+  --bg-card: rgba(10, 22, 40, 0.85);
+  --bg-card-hover: rgba(15, 30, 55, 0.9);
+
+  --border-card: rgba(0, 212, 255, 0.15);
+  --border-highlight: rgba(0, 212, 255, 0.4);
+
+  --color-cyan: #00d4ff;
+  --color-blue: #0066ff;
+  --color-gold: #ffd700;
+  --color-orange: #ff8c00;
+  --color-green: #00ff88;
+  --color-red: #ff4757;
+
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-muted: rgba(255, 255, 255, 0.4);
+
+  --glow-cyan: 0 0 15px rgba(0, 212, 255, 0.15);
+  --glow-cyan-strong: 0 0 20px rgba(0, 212, 255, 0.3);
+
+  --font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', sans-serif;
+  --font-digital: 'DIN Alternate', 'Courier New', monospace;
+
+  --header-height: 60px;
+  --gap: 10px;
+  --radius: 10px;
+}

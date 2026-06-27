@@ -1,0 +1,247 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <style>
+      .bg { fill: #eef1f4; }
+      .panel { fill: #ffffff; stroke: #d8dee6; stroke-width: 1; }
+      .panel-soft { fill: #fcfcfd; stroke: #eaecf0; stroke-width: 1; }
+      .text { fill: #101828; font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif; }
+      .muted { fill: #667085; font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif; }
+      .green { fill: #2f7d32; }
+      .green-soft { fill: #edf7ed; }
+      .blue { fill: #175cd3; }
+      .orange { fill: #b54708; }
+      .red { fill: #d92d20; }
+      .stroke-green { stroke: #2f7d32; }
+      .stroke-blue { stroke: #175cd3; }
+      .stroke-orange { stroke: #b54708; }
+      .thin { stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      .grid-line { stroke: #d5dbd1; stroke-width: 1; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1920" height="1080"/>
+
+  <rect x="0" y="0" width="1920" height="64" fill="#ffffff" stroke="#d8dee6"/>
+  <rect x="24" y="15" width="34" height="34" rx="7" class="green"/>
+  <text x="41" y="38" text-anchor="middle" fill="#ffffff" font-size="19" font-family="Microsoft YaHei, Arial" font-weight="700">农</text>
+  <text x="72" y="28" class="text" font-size="18" font-weight="700">电驱农机作业管理系统</text>
+  <text x="72" y="48" class="muted" font-size="12">实时监控 · 设备运维 · 收运调度</text>
+  <g transform="translate(1482 15)">
+    <rect x="0" y="0" width="92" height="34" rx="6" fill="#edf7ed" stroke="#c8e6c9"/>
+    <text x="46" y="22" text-anchor="middle" fill="#1f5f24" font-size="13" font-family="Microsoft YaHei, Arial">作业总览</text>
+    <rect x="102" y="0" width="106" height="34" rx="6" fill="#ffffff"/>
+    <text x="155" y="22" text-anchor="middle" class="muted" font-size="13">传感器数据</text>
+    <rect x="218" y="0" width="92" height="34" rx="6" fill="#ffffff"/>
+    <text x="264" y="22" text-anchor="middle" class="muted" font-size="13">收运调度</text>
+  </g>
+
+  <rect x="20" y="80" width="1880" height="74" rx="8" class="panel"/>
+  <text x="38" y="107" class="muted" font-size="12">作业管理 / 宁夏示范田 3 号</text>
+  <text x="38" y="136" class="text" font-size="24" font-weight="700">收割作业监控</text>
+  <g transform="translate(1345 96)">
+    <text x="0" y="0" class="muted" font-size="12">作业班次</text>
+    <rect x="0" y="10" width="180" height="36" rx="6" fill="#ffffff" stroke="#d0d5dd"/>
+    <text x="14" y="33" class="text" font-size="13">早班 08:00-16:00</text>
+    <rect x="194" y="10" width="92" height="36" rx="6" fill="#ffffff" stroke="#d0d5dd"/>
+    <text x="240" y="33" text-anchor="middle" class="text" font-size="13">导出日报</text>
+    <rect x="298" y="10" width="92" height="36" rx="6" fill="#2f7d32"/>
+    <text x="344" y="33" text-anchor="middle" fill="#ffffff" font-size="13" font-family="Microsoft YaHei, Arial">派发任务</text>
+  </g>
+
+  <g transform="translate(20 166)">
+    <g>
+      <rect width="364" height="86" rx="8" class="panel"/>
+      <text x="18" y="28" class="muted" font-size="12">在线设备</text>
+      <text x="18" y="58" class="text" font-size="25" font-weight="700">12 台</text>
+      <text x="106" y="58" class="muted" font-size="12">3 台正在作业</text>
+    </g>
+    <g transform="translate(379 0)">
+      <rect width="364" height="86" rx="8" class="panel"/>
+      <text x="18" y="28" class="muted" font-size="12">完成面积</text>
+      <text x="18" y="58" class="text" font-size="25" font-weight="700">326.8 亩</text>
+      <text x="150" y="58" class="muted" font-size="12">计划完成率 68%</text>
+    </g>
+    <g transform="translate(758 0)">
+      <rect width="364" height="86" rx="8" class="panel"/>
+      <text x="18" y="28" class="muted" font-size="12">累计产量</text>
+      <text x="18" y="58" class="text" font-size="25" font-weight="700">91.4 吨</text>
+      <text x="130" y="58" class="muted" font-size="12">平均亩产 604 kg</text>
+    </g>
+    <g transform="translate(1137 0)">
+      <rect width="364" height="86" rx="8" class="panel"/>
+      <text x="18" y="28" class="muted" font-size="12">漏割面积</text>
+      <text x="18" y="58" class="text" font-size="25" font-weight="700">1.6 亩</text>
+      <text x="112" y="58" class="muted" font-size="12">待复核 2 处</text>
+    </g>
+    <g transform="translate(1516 0)">
+      <rect width="364" height="86" rx="8" class="panel"/>
+      <text x="18" y="28" class="muted" font-size="12">重叠面积</text>
+      <text x="18" y="58" class="text" font-size="25" font-weight="700">0.8 亩</text>
+      <text x="112" y="58" class="muted" font-size="12">低于阈值</text>
+    </g>
+  </g>
+
+  <rect x="20" y="264" width="296" height="520" rx="8" class="panel"/>
+  <text x="38" y="296" class="text" font-size="16" font-weight="700">地块与任务</text>
+  <text x="250" y="296" class="muted" font-size="12">4 个地块</text>
+  <g transform="translate(38 318)">
+    <rect width="260" height="58" rx="7" fill="#f2faf2" stroke="#a6d8a8"/>
+    <text x="12" y="24" class="text" font-size="13" font-weight="700">东区 1 号田</text>
+    <text x="12" y="44" class="muted" font-size="12">HM-01 · 126 亩</text>
+    <text x="224" y="35" class="green" font-size="15" font-weight="700">78%</text>
+    <rect y="68" width="260" height="58" rx="7" class="panel-soft"/>
+    <text x="12" y="92" class="text" font-size="13" font-weight="700">南区 2 号田</text>
+    <text x="12" y="112" class="muted" font-size="12">HM-02 · 84 亩</text>
+    <text x="224" y="103" class="green" font-size="15" font-weight="700">54%</text>
+    <rect y="136" width="260" height="58" rx="7" class="panel-soft"/>
+    <text x="12" y="160" class="text" font-size="13" font-weight="700">西区 3 号田</text>
+    <text x="12" y="180" class="muted" font-size="12">待派发 · 68 亩</text>
+    <text x="232" y="171" class="muted" font-size="15" font-weight="700">0%</text>
+    <rect y="204" width="260" height="58" rx="7" class="panel-soft"/>
+    <text x="12" y="228" class="text" font-size="13" font-weight="700">北区试验田</text>
+    <text x="12" y="248" class="muted" font-size="12">HM-03 · 49 亩</text>
+    <text x="224" y="239" class="green" font-size="15" font-weight="700">91%</text>
+  </g>
+
+  <text x="38" y="620" class="text" font-size="16" font-weight="700">模块状态</text>
+  <g transform="translate(38 640)" font-size="13" font-family="Microsoft YaHei, Arial">
+    <text class="text" x="0" y="0">北斗定位</text><text class="green" x="218" y="0">正常</text>
+    <line x1="0" y1="16" x2="260" y2="16" stroke="#eaecf0"/>
+    <text class="text" x="0" y="38">视频回传</text><text class="green" x="218" y="38">正常</text>
+    <line x1="0" y1="54" x2="260" y2="54" stroke="#eaecf0"/>
+    <text class="text" x="0" y="76">产量核算</text><text class="blue" x="205" y="76">计算中</text>
+    <line x1="0" y1="92" x2="260" y2="92" stroke="#eaecf0"/>
+    <text class="text" x="0" y="114">OTA 版本</text><text class="orange" x="205" y="114">待更新</text>
+  </g>
+
+  <rect x="328" y="264" width="1030" height="520" rx="8" class="panel"/>
+  <text x="346" y="296" class="text" font-size="16" font-weight="700">地块作业地图</text>
+  <text x="346" y="316" class="muted" font-size="12">路径规划、实时位置、漏割与重叠区域</text>
+  <rect x="1182" y="282" width="88" height="28" rx="14" fill="#edf7ed" stroke="#c8e6c9"/>
+  <circle cx="1198" cy="296" r="4" class="green"/>
+  <text x="1210" y="300" fill="#1f5f24" font-size="12" font-family="Microsoft YaHei, Arial">定位正常</text>
+  <rect x="346" y="330" width="994" height="390" fill="#eef3ea" stroke="#eaecf0"/>
+  <g transform="translate(346 330)">
+    <g>
+      <line class="grid-line" x1="0" y1="48" x2="994" y2="48"/>
+      <line class="grid-line" x1="0" y1="96" x2="994" y2="96"/>
+      <line class="grid-line" x1="0" y1="144" x2="994" y2="144"/>
+      <line class="grid-line" x1="0" y1="192" x2="994" y2="192"/>
+      <line class="grid-line" x1="0" y1="240" x2="994" y2="240"/>
+      <line class="grid-line" x1="0" y1="288" x2="994" y2="288"/>
+      <line class="grid-line" x1="0" y1="336" x2="994" y2="336"/>
+      <line class="grid-line" x1="72" y1="0" x2="72" y2="390"/>
+      <line class="grid-line" x1="144" y1="0" x2="144" y2="390"/>
+      <line class="grid-line" x1="216" y1="0" x2="216" y2="390"/>
+      <line class="grid-line" x1="288" y1="0" x2="288" y2="390"/>
+      <line class="grid-line" x1="360" y1="0" x2="360" y2="390"/>
+      <line class="grid-line" x1="432" y1="0" x2="432" y2="390"/>
+      <line class="grid-line" x1="504" y1="0" x2="504" y2="390"/>
+      <line class="grid-line" x1="576" y1="0" x2="576" y2="390"/>
+      <line class="grid-line" x1="648" y1="0" x2="648" y2="390"/>
+      <line class="grid-line" x1="720" y1="0" x2="720" y2="390"/>
+      <line class="grid-line" x1="792" y1="0" x2="792" y2="390"/>
+      <line class="grid-line" x1="864" y1="0" x2="864" y2="390"/>
+      <line class="grid-line" x1="936" y1="0" x2="936" y2="390"/>
+    </g>
+    <path d="M80 58 L850 34 L920 292 L172 344 Z" fill="rgba(76,175,80,.08)" stroke="#2f7d32" stroke-width="3" stroke-dasharray="9 8"/>
+    <path d="M138 92 L798 72 L838 244 L228 278 Z" fill="rgba(47,125,50,.20)" stroke="rgba(47,125,50,.45)" stroke-width="2"/>
+    <path d="M640 112 L780 105 L796 152 L664 160 Z" fill="rgba(217,45,32,.20)" stroke="#d92d20" stroke-width="2"/>
+    <path d="M290 214 L500 203 L512 248 L306 262 Z" fill="rgba(181,71,8,.18)" stroke="#b54708" stroke-width="2"/>
+    <path d="M148 112 H810 M810 112 V156 H162 V202 H812 V248 H184 V294 H672" stroke="#b54708" stroke-width="4" stroke-dasharray="16 10" fill="none"/>
+    <path d="M148 112 H810 M810 112 V156 H162 V202 H812 V248 H184 V294 H672" stroke="#2f7d32" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <g transform="translate(658 276)">
+      <rect x="0" y="0" width="48" height="30" rx="5" fill="#2f7d32" stroke="rgba(0,0,0,.12)"/>
+      <rect x="12" y="-7" width="18" height="10" rx="3" fill="#98a2b3"/>
+      <rect x="-5" y="25" width="58" height="6" rx="3" fill="#b54708"/>
+    </g>
+    <rect x="686" y="112" width="58" height="24" rx="4" fill="#fffbfa" stroke="#fecdca"/>
+    <text x="715" y="129" text-anchor="middle" fill="#b42318" font-size="12" font-family="Microsoft YaHei, Arial">障碍物</text>
+    <rect x="188" y="292" width="58" height="24" rx="4" fill="#fffbfa" stroke="#fecdca"/>
+    <text x="217" y="309" text-anchor="middle" fill="#b42318" font-size="12" font-family="Microsoft YaHei, Arial">倒伏区</text>
+    <rect x="842" y="326" width="104" height="46" rx="6" fill="#ffffff" stroke="#d0d5dd"/>
+    <text x="856" y="344" class="muted" font-size="11">北斗定位</text>
+    <text x="856" y="364" class="text" font-size="17" font-weight="700">±2.5 cm</text>
+  </g>
+  <g transform="translate(346 735)" font-family="Microsoft YaHei, Arial" font-size="12">
+    <rect x="0" y="0" width="18" height="4" rx="2" fill="#b54708"/><text x="26" y="5" class="muted">规划路径</text>
+    <rect x="104" y="0" width="18" height="4" rx="2" fill="#2f7d32"/><text x="130" y="5" class="muted">已作业</text>
+    <rect x="196" y="0" width="18" height="4" rx="2" fill="#d92d20"/><text x="222" y="5" class="muted">漏割区域</text>
+    <rect x="306" y="0" width="18" height="4" rx="2" fill="#dc6803"/><text x="332" y="5" class="muted">重叠区域</text>
+  </g>
+
+  <rect x="1370" y="264" width="530" height="520" rx="8" class="panel"/>
+  <text x="1388" y="296" class="text" font-size="16" font-weight="700">设备 HM-01</text>
+  <rect x="1818" y="280" width="62" height="24" rx="12" fill="#edf7ed"/>
+  <text x="1849" y="297" text-anchor="middle" fill="#1f5f24" font-size="12" font-family="Microsoft YaHei, Arial">作业中</text>
+  <g transform="translate(1388 318)">
+    <rect width="238" height="70" rx="7" class="panel-soft"/>
+    <text x="12" y="26" class="muted" font-size="12">当前速度</text>
+    <text x="12" y="52" class="text" font-size="19" font-weight="700">5.8 km/h</text>
+    <rect x="252" width="238" height="70" rx="7" class="panel-soft"/>
+    <text x="264" y="26" class="muted" font-size="12">割幅</text>
+    <text x="264" y="52" class="text" font-size="19" font-weight="700">6.2 m</text>
+    <g transform="translate(0 84)">
+      <rect width="152" height="76" rx="7" class="panel-soft"/><text x="12" y="25" class="muted" font-size="12">电机转速</text><text x="12" y="52" class="text" font-size="22" font-weight="700">1840</text><text x="82" y="52" class="muted" font-size="12">rpm</text>
+      <rect x="169" width="152" height="76" rx="7" class="panel-soft"/><text x="181" y="25" class="muted" font-size="12">切削扭矩</text><text x="181" y="52" class="text" font-size="22" font-weight="700">612</text><text x="236" y="52" class="muted" font-size="12">N·m</text>
+      <rect x="338" width="152" height="76" rx="7" class="panel-soft"/><text x="350" y="25" class="muted" font-size="12">液压压力</text><text x="350" y="52" class="text" font-size="22" font-weight="700">18.6</text><text x="414" y="52" class="muted" font-size="12">MPa</text>
+      <rect y="88" width="152" height="76" rx="7" class="panel-soft"/><text x="12" y="113" class="muted" font-size="12">电能消耗</text><text x="12" y="140" class="text" font-size="22" font-weight="700">42.8</text><text x="74" y="140" class="muted" font-size="12">kWh</text>
+      <rect x="169" y="88" width="152" height="76" rx="7" class="panel-soft"/><text x="181" y="113" class="muted" font-size="12">土壤含水量</text><text x="181" y="140" class="text" font-size="22" font-weight="700">23.4</text><text x="242" y="140" class="muted" font-size="12">%</text>
+      <rect x="338" y="88" width="152" height="76" rx="7" class="panel-soft"/><text x="350" y="113" class="muted" font-size="12">粮仓容量</text><text x="350" y="140" class="text" font-size="22" font-weight="700">78</text><text x="388" y="140" class="muted" font-size="12">%</text>
+    </g>
+  </g>
+  <text x="1388" y="600" class="text" font-size="16" font-weight="700">设备提醒</text>
+  <rect x="1388" y="616" width="492" height="58" rx="7" fill="#fffbeb" stroke="#fedf89"/>
+  <text x="1402" y="640" class="text" font-size="13" font-weight="700">粮仓容量 78%</text>
+  <text x="1402" y="660" class="muted" font-size="12">预计 14 分钟后需要卸粮</text>
+  <rect x="1388" y="684" width="492" height="58" rx="7" class="panel-soft"/>
+  <text x="1402" y="708" class="text" font-size="13" font-weight="700">割台视频正常</text>
+  <text x="1402" y="728" class="muted" font-size="12">最近一次回传 10:24:16</text>
+
+  <rect x="20" y="796" width="622" height="264" rx="8" class="panel"/>
+  <text x="38" y="828" class="text" font-size="16" font-weight="700">环境与作业质量</text>
+  <text x="542" y="828" class="muted" font-size="12">10 分钟粒度</text>
+  <g transform="translate(70 860)">
+    <line x1="0" y1="150" x2="520" y2="150" stroke="#d0d5dd"/>
+    <line x1="0" y1="110" x2="520" y2="110" stroke="#eaecf0"/>
+    <line x1="0" y1="70" x2="520" y2="70" stroke="#eaecf0"/>
+    <line x1="0" y1="30" x2="520" y2="30" stroke="#eaecf0"/>
+    <path d="M0 118 C80 112 88 80 170 76 S292 34 340 44 S452 56 520 72" class="thin stroke-orange"/>
+    <path d="M0 82 C70 88 110 96 170 104 S290 116 340 112 S460 100 520 96" class="thin stroke-blue"/>
+    <path d="M0 136 C72 128 100 116 170 108 S292 80 340 74 S454 88 520 106" class="thin stroke-green"/>
+  </g>
+
+  <rect x="654" y="796" width="622" height="264" rx="8" class="panel"/>
+  <text x="672" y="828" class="text" font-size="16" font-weight="700">地块产量</text>
+  <text x="1156" y="828" class="muted" font-size="12">按作业区统计</text>
+  <g transform="translate(715 870)">
+    <line x1="0" y1="140" x2="500" y2="140" stroke="#d0d5dd"/>
+    <rect x="30" y="42" width="22" height="98" rx="3" class="blue"/><rect x="58" y="88" width="22" height="52" rx="3" class="green"/>
+    <rect x="130" y="68" width="22" height="72" rx="3" class="blue"/><rect x="158" y="100" width="22" height="40" rx="3" class="green"/>
+    <rect x="230" y="58" width="22" height="82" rx="3" class="blue"/><rect x="258" y="94" width="22" height="46" rx="3" class="green"/>
+    <rect x="330" y="76" width="22" height="64" rx="3" class="blue"/><rect x="358" y="104" width="22" height="36" rx="3" class="green"/>
+    <rect x="430" y="92" width="22" height="48" rx="3" class="blue"/><rect x="458" y="112" width="22" height="28" rx="3" class="green"/>
+  </g>
+
+  <rect x="1288" y="796" width="612" height="264" rx="8" class="panel"/>
+  <text x="1306" y="828" class="text" font-size="16" font-weight="700">收运接驳</text>
+  <rect x="1810" y="812" width="70" height="24" rx="12" fill="#fff4e5"/>
+  <text x="1845" y="829" text-anchor="middle" class="orange" font-size="12" font-family="Microsoft YaHei, Arial">待接驳</text>
+  <g transform="translate(1306 850)" font-family="Microsoft YaHei, Arial" font-size="13">
+    <rect width="574" height="36" fill="#f9fafb"/>
+    <text x="12" y="23" class="muted" font-weight="700">车辆</text>
+    <text x="206" y="23" class="muted" font-weight="700">位置</text>
+    <text x="420" y="23" class="muted" font-weight="700">预计到达</text>
+    <line x1="0" y1="36" x2="574" y2="36" stroke="#eaecf0"/>
+    <text x="12" y="66" class="text">A2 运粮车</text>
+    <text x="206" y="66" class="text">P3 汇合点</text>
+    <text x="420" y="66" class="text">8 分钟</text>
+    <line x1="0" y1="82" x2="574" y2="82" stroke="#eaecf0"/>
+    <text x="12" y="112" class="text">A5 运粮车</text>
+    <text x="206" y="112" class="text">北侧道路</text>
+    <text x="420" y="112" class="text">17 分钟</text>
+    <rect y="138" width="574" height="62" rx="7" fill="#f9fafb"/>
+    <text x="14" y="164" class="text" font-weight="700">建议路线</text>
+    <text x="14" y="186" class="muted">HM-01 → P3 汇合点 → A2 运粮车</text>
+  </g>
+</svg>

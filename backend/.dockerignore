@@ -1,0 +1,6 @@
+target
+src/main/resources/**/.venv
+src/main/resources/**/__pycache__
+src/main/resources/**/*.pyc
+src/main/resources/**/tempfile_*.bash
+*.log

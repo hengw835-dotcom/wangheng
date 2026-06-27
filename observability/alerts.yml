@@ -1,0 +1,26 @@
+groups:
+  - name: smart-harvester
+    rules:
+      - alert: SmartHarvesterBackendDown
+        expr: up{job="smart-harvester-backend"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: Smart Harvester backend is unavailable
+
+      - alert: SmartHarvesterHighErrorRate
+        expr: sum(rate(http_server_requests_seconds_count{job="smart-harvester-backend",status=~"5.."}[5m])) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Smart Harvester backend has an elevated 5xx error rate
+
+      - alert: SmartHarvesterHighJvmHeapUsage
+        expr: sum(jvm_memory_used_bytes{job="smart-harvester-backend",area="heap"}) / sum(jvm_memory_max_bytes{job="smart-harvester-backend",area="heap"}) > 0.85
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: Smart Harvester JVM heap usage is above 85%

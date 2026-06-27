@@ -1,0 +1,90 @@
+server:
+  port: ${SERVER_PORT:8086}
+
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: false
+    locations: classpath:db/migration
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+
+app:
+  cors:
+    allowed-origins: ${APP_CORS_ALLOWED_ORIGINS}
+  security:
+    jwt-secret: ${JWT_SECRET}
+    metrics-token: ${METRICS_TOKEN}
+    token-ttl-minutes: ${JWT_TTL_MINUTES:60}
+    users:
+      admin:
+        username: ${ADMIN_USERNAME}
+        password: ${ADMIN_PASSWORD}
+      dispatcher:
+        username: ${DISPATCHER_USERNAME}
+        password: ${DISPATCHER_PASSWORD}
+      driver:
+        username: ${DRIVER_USERNAME}
+        password: ${DRIVER_PASSWORD}
+      viewer:
+        username: ${VIEWER_USERNAME}
+        password: ${VIEWER_PASSWORD}
+    rate-limit:
+      requests: ${RATE_LIMIT_REQUESTS:120}
+      window-seconds: ${RATE_LIMIT_WINDOW_SECONDS:60}
+  capabilities:
+    ai-vision: ${AI_VISION_MODE:demo}
+    navigation: ${NAVIGATION_MODE:demo}
+    control: ${CONTROL_MODE:demo}
+  sensor-simulator:
+    interval-ms: ${SENSOR_SIMULATOR_INTERVAL_MS:5000}
+
+mqtt:
+  broker: ${MQTT_BROKER}
+  clientId: ${MQTT_CLIENT_ID:smart-harvester-prod}
+  username: ${MQTT_USERNAME}
+  password: ${MQTT_PASSWORD}
+  ssl:
+    enabled: ${MQTT_SSL_ENABLED:false}
+  connection:
+    timeout: 10
+    keepalive: 60
+    clean-session: false
+    auto-reconnect: true
+    max-reconnect-interval: 60
+    reconnect-delay: 5
+  qos: 1
+  topics:
+    - harvester/+/status
+    - harvester/+/sensor
+    - harvester/+/control/ack
+    - harvester/ai/vision
+    - harvester/task/update
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      show-details: never
