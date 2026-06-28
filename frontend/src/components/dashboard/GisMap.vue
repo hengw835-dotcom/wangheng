@@ -1,5 +1,18 @@
 <template>
   <div class="map-canvas">
+    <div class="satellite-layer" aria-hidden="true">
+      <img
+        v-for="tile in satelliteTiles"
+        :key="tile.key"
+        :src="tile.url"
+        :style="tile.style"
+        alt=""
+        loading="eager"
+        draggable="false"
+      />
+      <span class="satellite-credit">Esri World Imagery</span>
+    </div>
+
     <div class="map-controls">
       <label><el-icon><Search /></el-icon><input v-model="keyword" placeholder="搜索地块名称/设备ID" /></label>
       <button type="button">全部设备 <el-icon><ArrowDown /></el-icon></button>
@@ -98,6 +111,8 @@ const props = defineProps({
 
 const keyword = ref('')
 const selected = ref(null)
+const satelliteCenter = { lat: 38.9708, lng: 106.4132 }
+const satelliteZoom = 15
 const mapChecks = [
   { label: '地块边界', checked: true },
   { label: '作业路线', checked: true },
@@ -116,6 +131,29 @@ const fallbackFields = [
 
 const visibleFields = computed(() => props.fields.length ? props.fields : fallbackFields)
 const filteredMachines = computed(() => props.machines.filter(machine => !keyword.value || `${machine.id}${machine.location}${machine.type}`.includes(keyword.value)))
+const satelliteTiles = computed(() => {
+  const center = lngLatToTile(satelliteCenter.lng, satelliteCenter.lat, satelliteZoom)
+  const tiles = []
+  const cols = 5
+  const rows = 4
+  for (let row = 0; row < rows; row += 1) {
+    for (let col = 0; col < cols; col += 1) {
+      const x = center.x + col - Math.floor(cols / 2)
+      const y = center.y + row - Math.floor(rows / 2)
+      tiles.push({
+        key: `${satelliteZoom}-${x}-${y}`,
+        url: `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${satelliteZoom}/${y}/${x}`,
+        style: {
+          left: `${col * (100 / cols)}%`,
+          top: `${row * (100 / rows)}%`,
+          width: `${100 / cols}%`,
+          height: `${100 / rows}%`
+        }
+      })
+    }
+  }
+  return tiles
+})
 
 watch(() => props.machines, machines => {
   selected.value = machines[0] || null
@@ -146,6 +184,15 @@ function fieldStyle(index) {
   ]
   return styles[index % styles.length]
 }
+
+function lngLatToTile(lng, lat, zoom) {
+  const latRad = lat * Math.PI / 180
+  const scale = 2 ** zoom
+  return {
+    x: Math.floor((lng + 180) / 360 * scale),
+    y: Math.floor((1 - Math.log(Math.tan(latRad) + (1 / Math.cos(latRad))) / Math.PI) / 2 * scale)
+  }
+}
 </script>
 
 <style scoped>
@@ -153,11 +200,46 @@ function fieldStyle(index) {
   position: absolute;
   inset: 0;
   overflow: hidden;
+  background: #0f1b17;
+}
+
+.satellite-layer {
+  position: absolute;
+  inset: -4%;
+  z-index: 0;
+  overflow: hidden;
+  background: #102017;
+}
+
+.satellite-layer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
   background:
-    linear-gradient(26deg, rgba(255,255,255,.08) 1px, transparent 1px) 0 0/76px 48px,
-    linear-gradient(116deg, rgba(255,255,255,.055) 1px, transparent 1px) 0 0/92px 60px,
-    radial-gradient(circle at 50% 52%, rgba(23, 132, 61, .36), transparent 42%),
-    linear-gradient(135deg, #172f22, #2c4a2f 42%, #142620);
+    linear-gradient(26deg, rgba(255,255,255,.06) 1px, transparent 1px) 0 0/76px 48px,
+    linear-gradient(116deg, rgba(255,255,255,.04) 1px, transparent 1px) 0 0/92px 60px,
+    radial-gradient(circle at 50% 52%, rgba(13, 54, 33, .04), rgba(3, 11, 10, .34) 70%),
+    rgba(3, 13, 12, .18);
+  pointer-events: none;
+}
+
+.satellite-layer img {
+  position: absolute;
+  display: block;
+  object-fit: cover;
+  filter: saturate(1.18) contrast(1.08) brightness(.82);
+}
+
+.satellite-credit {
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+  z-index: 2;
+  padding: 3px 7px;
+  border-radius: 4px;
+  color: rgba(220, 239, 255, .78);
+  background: rgba(3, 12, 18, .55);
+  font-size: 11px;
 }
 
 button {

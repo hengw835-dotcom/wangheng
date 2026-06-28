@@ -7,6 +7,16 @@ const routes = [
     component: () => import('../views/DashboardView.vue')
   },
   {
+    path: '/home',
+    name: 'Home',
+    component: () => import('../views/Home.vue')
+  },
+  {
+    path: '/integrated',
+    name: 'Integrated',
+    component: () => import('../views/IntegratedView.vue')
+  },
+  {
     path: '/tasks',
     name: 'TaskManagement',
     component: () => import('../views/TaskManagement.vue')
@@ -40,6 +50,10 @@ const routes = [
     path: '/reports',
     name: 'Reports',
     component: () => import('../views/ReportsView.vue')
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/'
   }
 ]
 

@@ -162,7 +162,8 @@ import {
   Setting,
   Tickets,
   Van,
-  VideoCamera
+  VideoCamera,
+  View
 } from '@element-plus/icons-vue'
 import DashboardPanel from '../components/dashboard/DashboardPanel.vue'
 import DashboardTable from '../components/dashboard/DashboardTable.vue'
@@ -205,6 +206,8 @@ const sideItems = [
   { label: '传感器数据', path: '/sensors', icon: Position },
   { label: '传感器模拟器', path: '/simulator', icon: Monitor },
   { label: '数据报表', path: '/reports', icon: DataAnalysis },
+  { label: '综合大屏', path: '/integrated', icon: View },
+  { label: '旧首页', path: '/home', icon: Van },
   { label: '登录与权限', path: '/', icon: Setting }
 ]
 

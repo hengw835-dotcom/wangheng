@@ -43,7 +43,7 @@
             <div class="overview-stats">
               <div class="stat-card">
                 <div class="stat-icon">馃殰</div>
-                <el-statistic :value="onlineMachines" suffix="鍙? class="stat-value">
+                <el-statistic :value="onlineMachines" suffix="台" class="stat-value">
                   <template #title>
                     <span class="stat-title">鍦ㄧ嚎鍐滄満</span>
                   </template>
@@ -51,7 +51,7 @@
               </div>
               <div class="stat-card">
                 <div class="stat-icon">馃搵</div>
-                <el-statistic :value="activeTasks" suffix="涓? class="stat-value">
+                <el-statistic :value="activeTasks" suffix="个" class="stat-value">
                   <template #title>
                     <span class="stat-title">娲昏穬浠诲姟</span>
                   </template>
@@ -59,15 +59,15 @@
               </div>
               <div class="stat-card">
                 <div class="stat-icon">馃尵</div>
-                <el-statistic :value="todayHarvest" suffix="浜? class="stat-value">
+                <el-statistic :value="todayHarvest" suffix="亩" class="stat-value">
                   <template #title>
                     <span class="stat-title">浠婃棩鏀跺壊闈㈢Н</span>
                   </template>
                 </el-statistic>
               </div>
               <div class="stat-card">
-                <div class="stat-icon">鈿?/div>
-                <el-statistic :value="estimatedYield" suffix="鍚? class="stat-value">
+                <div class="stat-icon">⚖</div>
+                <el-statistic :value="estimatedYield" suffix="吨" class="stat-value">
                   <template #title>
                     <span class="stat-title">棰勪及浜ч噺</span>
                   </template>
@@ -78,7 +78,7 @@
             <!-- 鍥捐〃鍖哄煙 -->
             <div class="charts-section">
               <div class="section-title">
-                <span>鏁版嵁鍙鍖?/span>
+                <span>鏁版嵁鍙鍖</span>
               </div>
               <el-row :gutter="30">
                 <el-col :span="12">
@@ -103,7 +103,7 @@
             <!-- 鏈€杩戜换鍔?-->
             <div class="tasks-section">
               <div class="section-title">
-                <span>鏈€杩戜换鍔?/span>
+                <span>鏈€杩戜换鍔</span>
               </div>
               <div class="tasks-card">
                 <el-table :data="recentTasks" class="tasks-table">
@@ -122,12 +122,12 @@
                       <span class="table-cell">{{ scope.row.machineId }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column prop="status" label="鐘舵€? width="120">
+                  <el-table-column prop="status" label="状态" width="120">
                     <template #default="scope">
                       <el-tag :class="['status-tag', `status-${scope.row.status.toLowerCase()}`]">{{ scope.row.status }}</el-tag>
                     </template>
                   </el-table-column>
-                  <el-table-column prop="completedArea" label="瀹屾垚闈㈢Н(浜?" width="140">
+                  <el-table-column prop="completedArea" label="完成面积(亩)" width="140">
                     <template #default="scope">
                       <div class="progress-bar-container">
                         <div class="progress-bar" :style="{ width: `${(scope.row.completedArea / 100) * 100}%` }"></div>
@@ -163,7 +163,7 @@
                     <span class="table-cell">{{ scope.row.model }}</span>
                   </template>
                 </el-table-column>
-                <el-table-column prop="status" label="鐘舵€? width="100">
+                <el-table-column prop="status" label="状态" width="100">
                   <template #default="scope">
                     <el-tag :class="['status-tag', `status-${scope.row.status.toLowerCase()}`]">{{ scope.row.status }}</el-tag>
                   </template>
@@ -173,7 +173,7 @@
                     <span class="table-cell">{{ scope.row.location }}</span>
                   </template>
                 </el-table-column>
-                <el-table-column prop="lastUpdated" label="鏈€鍚庢洿鏂? width="180">
+                <el-table-column prop="lastUpdated" label="最后更新" width="180">
                   <template #default="scope">
                     <span class="table-cell">{{ formatDate(scope.row.lastUpdated) }}</span>
                   </template>
@@ -216,34 +216,34 @@
                     <span class="table-cell">{{ scope.row.machineId }}</span>
                   </template>
                 </el-table-column>
-                <el-table-column prop="status" label="鐘舵€? width="100">
+                <el-table-column prop="status" label="状态" width="100">
                   <template #default="scope">
                     <el-tag :class="['status-tag', `status-${scope.row.status.toLowerCase()}`]">{{ scope.row.status }}</el-tag>
                   </template>
                 </el-table-column>
-                <el-table-column prop="targetArea" label="鐩爣闈㈢Н(浜?" width="120">
+                <el-table-column prop="targetArea" label="目标面积(亩)" width="120">
                   <template #default="scope">
                     <span class="table-cell">{{ scope.row.targetArea }}</span>
                   </template>
                 </el-table-column>
-                <el-table-column prop="completedArea" label="瀹屾垚闈㈢Н(浜?" width="120">
+                <el-table-column prop="completedArea" label="完成面积(亩)" width="120">
                   <template #default="scope">
                     <span class="table-cell">{{ scope.row.completedArea }}</span>
                   </template>
                 </el-table-column>
-                <el-table-column prop="estimatedYield" label="棰勪及浜ч噺(鍚?" width="120">
+                <el-table-column prop="estimatedYield" label="预计产量(吨)" width="120">
                   <template #default="scope">
                     <span class="table-cell">{{ scope.row.estimatedYield }}</span>
                   </template>
                 </el-table-column>
-                <el-table-column prop="startTime" label="寮€濮嬫椂闂? width="180">
+                <el-table-column prop="startTime" label="开始时间" width="180">
                   <template #default="scope">
                     <span class="table-cell">{{ formatDate(scope.row.startTime) }}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="鎿嶄綔" width="150">
                   <template #default="scope">
-                    <el-button size="small" @click="updateTaskStatus(scope.row.taskId, 'IN_PROGRESS')" v-if="scope.row.status === 'PENDING'" class="scifi-button">寮€濮?/el-button>
+                    <el-button size="small" @click="updateTaskStatus(scope.row.taskId, 'IN_PROGRESS')" v-if="scope.row.status === 'PENDING'" class="scifi-button">寮€濮</el-button>
                     <el-button size="small" @click="updateTaskStatus(scope.row.taskId, 'COMPLETED')" v-if="scope.row.status === 'IN_PROGRESS'" class="scifi-button success">瀹屾垚</el-button>
                     <el-button size="small" type="danger" @click="deleteTask(scope.row.taskId)" class="scifi-button danger">鍒犻櫎</el-button>
                   </template>
@@ -253,15 +253,15 @@
           </div>
         </el-tab-pane>
         
-        <el-tab-pane label="浼犳劅鍣ㄦ暟鎹? name="sensor-data" class="tab-pane">
+        <el-tab-pane label="传感器数据" name="sensor-data" class="tab-pane">
           <!-- 浼犳劅鍣ㄦ暟鎹唴瀹?-->
           <div class="sensor-data">
             <div class="section-title">
-              <span>浼犳劅鍣ㄦ暟鎹?/span>
+              <span>浼犳劅鍣ㄦ暟鎹</span>
             </div>
             <div class="sensor-card">
               <div class="card-header">
-                <span>浼犳劅鍣ㄦ暟鎹?/span>
+                <span>浼犳劅鍣ㄦ暟鎹</span>
                 <el-select v-model="selectedMachineId" placeholder="閫夋嫨鍐滄満" class="scifi-select">
                   <el-option v-for="machine in machines" :key="machine.machineId" :label="machine.machineId" :value="machine.machineId" />
                 </el-select>
@@ -305,12 +305,12 @@
                 </el-row>
               </div>
               <el-table :data="sensorData" class="scifi-table" style="margin-top: 20px;">
-                <el-table-column prop="sensorType" label="浼犳劅鍣ㄧ被鍨? width="120">
+                <el-table-column prop="sensorType" label="传感器类型" width="120">
                   <template #default="scope">
                     <span class="table-cell">{{ scope.row.sensorType }}</span>
                   </template>
                 </el-table-column>
-                <el-table-column prop="value" label="鏁板€?>
+                <el-table-column prop="value" label="数值">
                   <template #default="scope">
                     <span class="table-cell">{{ scope.row.value }}</span>
                   </template>
@@ -344,7 +344,7 @@
             <div class="vision-card">
               <div class="card-header">
                 <span>AI瑙嗚璇嗗埆</span>
-                <el-button type="primary" @click="startRecognition" class="scifi-button">寮€濮嬭瘑鍒?/el-button>
+                <el-button type="primary" @click="startRecognition" class="scifi-button">寮€濮嬭瘑鍒</el-button>
               </div>
               <div class="vision-content">
                 <el-row :gutter="20">
@@ -375,7 +375,7 @@
                               <span class="table-cell">{{ scope.row.label }}</span>
                             </template>
                           </el-table-column>
-                          <el-table-column prop="confidence" label="缃俊搴? width="100">
+                          <el-table-column prop="confidence" label="置信度" width="100">
                             <template #default="scope">
                               <span class="table-cell">{{ (scope.row.confidence * 100).toFixed(1) }}%</span>
                             </template>
@@ -407,8 +407,8 @@
                           <span>缁熻淇℃伅</span>
                         </div>
                         <div class="stats-content">
-                          <el-statistic class="stat-item" title="妫€娴嬪埌鐩爣鏁? :value="detections.length"></el-statistic>
-                          <el-statistic class="stat-item" title="骞冲潎缃俊搴? :value="averageConfidence" suffix="%"></el-statistic>
+                          <el-statistic class="stat-item" title="检测目标数" :value="detections.length"></el-statistic>
+                          <el-statistic class="stat-item" title="平均置信度" :value="averageConfidence" suffix="%"></el-statistic>
                           <el-statistic class="stat-item" title="澶勭悊鏃堕棿" :value="processingTime" suffix="ms"></el-statistic>
                         </div>
                       </div>
@@ -419,7 +419,7 @@
                   <el-col :span="24">
                     <div class="heatmap-card">
                       <div class="chart-header">
-                        <span>浜ч噺鍒嗗竷鐑姏鍥?/span>
+                        <span>浜ч噺鍒嗗竷鐑姏鍥</span>
                       </div>
                       <div ref="heatmapChart" class="heatmap"></div>
                     </div>
@@ -454,7 +454,7 @@
                         <!-- 鍔犺浇涓姸鎬?-->
                         <div v-if="!mapUrl" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(10, 10, 30, 0.6); border-radius: 8px; border: 1px solid rgba(0, 255, 255, 0.3);">
                           <div style="text-align: center; color: #00ffff;">
-                            <div style="font-size: 24px; margin-bottom: 10px;">馃椇锔?/div>
+                            <div style="font-size: 24px; margin-bottom: 10px;">馃椇锔</div>
                             <div>鍖楁枟鍗槦鍦板浘</div>
                             <div style="margin-top: 10px; font-size: 14px; color: rgba(255, 255, 255, 0.7);">姝ｅ湪鑾峰彇褰撳墠浣嶇疆...</div>
                           </div>
@@ -490,8 +490,8 @@
                           </el-form-item>
                           <el-form-item label="瑙勫垝妯″紡">
                             <el-select v-model="routeForm.planningMode" class="scifi-select">
-                              <el-option label="鏈€鐭矾寰? value="shortest" />
-                              <el-option label="鏈€浼樿矾寰? value="optimal" />
+                              <el-option label="最短路径" value="shortest" />
+                              <el-option label="最优路径" value="optimal" />
                               <el-option label="閬块殰璺緞" value="obstacle" />
                             </el-select>
                           </el-form-item>
@@ -500,14 +500,14 @@
                           </el-form-item>
                           <el-form-item>
                             <el-button type="primary" @click="planRoute" class="scifi-button">瑙勫垝璺嚎</el-button>
-                            <el-button @click="startNavigation" class="scifi-button">寮€濮嬪鑸?/el-button>
+                            <el-button @click="startNavigation" class="scifi-button">寮€濮嬪鑸</el-button>
                           </el-form-item>
                         </el-form>
                       </div>
                     </div>
                     <div class="satellite-status-card" style="margin-top: 20px;">
                       <div class="chart-header">
-                        <span>鍗槦鐘舵€?/span>
+                        <span>鍗槦鐘舵€</span>
                       </div>
                       <div class="satellite-content">
                         <el-row :gutter="10">
@@ -540,7 +540,7 @@
                         <span class="table-cell">{{ scope.row.key }}</span>
                       </template>
                     </el-table-column>
-                    <el-table-column prop="value" label="鏁板€?>
+                    <el-table-column prop="value" label="数值">
                       <template #default="scope">
                         <span class="table-cell">{{ scope.row.value }}</span>
                       </template>
@@ -571,7 +571,7 @@
                   <el-col :span="12">
                     <div class="control-sub-card">
                       <div class="chart-header">
-                        <span>瀹炴椂鐘舵€?/span>
+                        <span>瀹炴椂鐘舵€</span>
                         <div class="header-glow"></div>
                       </div>
                       <div class="status-content">
@@ -580,12 +580,12 @@
                             <el-statistic title="閫熷害" :value="speed" suffix="km/h" class="stat-item"></el-statistic>
                           </el-col>
                           <el-col :span="12">
-                            <el-statistic title="杞€? :value="rpm" suffix="rpm" class="stat-item"></el-statistic>
+                            <el-statistic title="转速" :value="rpm" suffix="rpm" class="stat-item"></el-statistic>
                           </el-col>
                         </el-row>
                         <el-row :gutter="10" style="margin-top: 20px;">
                           <el-col :span="12">
-                            <el-statistic title="娓╁害" :value="temperature" suffix="鈩? class="stat-item"></el-statistic>
+                            <el-statistic title="温度" :value="temperature" suffix="℃" class="stat-item"></el-statistic>
                           </el-col>
                           <el-col :span="12">
                             <el-statistic title="鍘嬪姏" :value="pressure" suffix="bar" class="stat-item"></el-statistic>
@@ -615,7 +615,7 @@
                           <el-form-item label="鍒囧壊楂樺害">
                             <el-slider v-model="controlParams.cuttingHeight" :min="0" :max="100" :step="1" show-input class="scifi-slider" />
                           </el-form-item>
-                          <el-form-item label="鍠傚叆閲?>
+                          <el-form-item label="喂入量">
                             <el-slider v-model="controlParams.feedingRate" :min="0" :max="100" :step="1" show-input class="scifi-slider" />
                           </el-form-item>
                           <el-form-item label="PID鍙傛暟">
@@ -664,7 +664,7 @@
                     </div>
                     <div class="control-sub-card" style="margin-top: 20px;">
                       <div class="chart-header">
-                        <span>濮挎€佺洃鎺?/span>
+                        <span>濮挎€佺洃鎺</span>
                         <div class="header-glow"></div>
                       </div>
                       <div ref="attitudeChart" class="attitude-chart"></div>
@@ -691,22 +691,22 @@
         <el-form-item label="鍐滄満ID">
           <el-input v-model="machineForm.machineId" placeholder="璇疯緭鍏ュ啘鏈篒D" class="scifi-input" />
         </el-form-item>
-        <el-form-item label="鍨嬪彿">
-          <el-input v-model="machineForm.model" placeholder="璇疯緭鍏ュ瀷鍙? class="scifi-input" />
+        <el-form-item label="型号">
+          <el-input v-model="machineForm.model" placeholder="请输入型号" class="scifi-input" />
         </el-form-item>
-        <el-form-item label="鐘舵€?>
-          <el-select v-model="machineForm.status" placeholder="璇烽€夋嫨鐘舵€? class="scifi-select">
+        <el-form-item label="状态">
+          <el-select v-model="machineForm.status" placeholder="请选择状态" class="scifi-select">
             <el-option label="鍦ㄧ嚎" value="ONLINE" />
             <el-option label="绂荤嚎" value="OFFLINE" />
-            <el-option label="宸ヤ綔涓? value="WORKING" />
+            <el-option label="工作中" value="WORKING" />
             <el-option label="鏁呴殰" value="ERROR" />
           </el-select>
         </el-form-item>
         <el-form-item label="浣嶇疆">
-          <el-input v-model="machineForm.location" placeholder="璇疯緭鍏ヤ綅缃? class="scifi-input" />
+          <el-input v-model="machineForm.location" placeholder="请输入位置" class="scifi-input" />
         </el-form-item>
         <el-form-item label="鍙傛暟">
-          <el-input v-model="machineForm.parameters" placeholder="璇疯緭鍏ュ弬鏁? type="textarea" class="scifi-input" />
+          <el-input v-model="machineForm.parameters" placeholder="请输入参数" type="textarea" class="scifi-input" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -726,16 +726,16 @@
     >
       <el-form :model="taskForm" label-width="80px">
         <el-form-item label="鍦板潡鍚嶇О">
-          <el-input v-model="taskForm.fieldName" placeholder="璇疯緭鍏ュ湴鍧楀悕绉? class="scifi-input" />
+          <el-input v-model="taskForm.fieldName" placeholder="请输入地块名称" class="scifi-input" />
         </el-form-item>
         <el-form-item label="鍐滄満ID">
           <el-input v-model="taskForm.machineId" placeholder="璇疯緭鍏ュ啘鏈篒D" class="scifi-input" />
         </el-form-item>
         <el-form-item label="鐩爣闈㈢Н">
-          <el-input v-model.number="taskForm.targetArea" placeholder="璇疯緭鍏ョ洰鏍囬潰绉? type="number" class="scifi-input" />
+          <el-input v-model.number="taskForm.targetArea" placeholder="请输入目标面积" type="number" class="scifi-input" />
         </el-form-item>
         <el-form-item label="棰勪及浜ч噺">
-          <el-input v-model.number="taskForm.estimatedYield" placeholder="璇疯緭鍏ラ浼颁骇閲? type="number" class="scifi-input" />
+          <el-input v-model.number="taskForm.estimatedYield" placeholder="请输入预计产量" type="number" class="scifi-input" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -754,21 +754,21 @@ import * as echarts from 'echarts'
 
 // 妯℃嫙鏁版嵁
 const machines = ref([
-  { machineId: 'machine-001', model: 'John Deere S780', status: 'ONLINE', location: '涓滃湴鍧?, lastUpdated: new Date().toISOString(), parameters: '{"engine_hours": 1200, "fuel_level": 85, "cutting_width": 12}' },
-  { machineId: 'machine-002', model: 'Case IH Axial-Flow 9240', status: 'OFFLINE', location: '瑗垮湴鍧?, lastUpdated: new Date().toISOString(), parameters: '{"engine_hours": 850, "fuel_level": 60, "cutting_width": 10}' },
-  { machineId: 'machine-003', model: 'New Holland CR10.90', status: 'WORKING', location: '鍗楀湴鍧?, lastUpdated: new Date().toISOString(), parameters: '{"engine_hours": 1500, "fuel_level": 90, "cutting_width": 14}' }
+  { machineId: 'machine-001', model: 'John Deere S780', status: 'ONLINE', location: '东地块', lastUpdated: new Date().toISOString(), parameters: '{"engine_hours": 1200, "fuel_level": 85, "cutting_width": 12}' },
+  { machineId: 'machine-002', model: 'Case IH Axial-Flow 9240', status: 'OFFLINE', location: '西地块', lastUpdated: new Date().toISOString(), parameters: '{"engine_hours": 850, "fuel_level": 60, "cutting_width": 10}' },
+  { machineId: 'machine-003', model: 'New Holland CR10.90', status: 'WORKING', location: '南地块', lastUpdated: new Date().toISOString(), parameters: '{"engine_hours": 1500, "fuel_level": 90, "cutting_width": 14}' }
 ])
 
 const tasks = ref([
-  { taskId: 'task-001', fieldName: '涓滃湴鍧?, machineId: 'machine-001', status: 'IN_PROGRESS', targetArea: 100, completedArea: 45, estimatedYield: 25, startTime: new Date().toISOString() },
-  { taskId: 'task-002', fieldName: '瑗垮湴鍧?, machineId: 'machine-002', status: 'PENDING', targetArea: 80, completedArea: 0, estimatedYield: 20, startTime: new Date().toISOString() },
-  { taskId: 'task-003', fieldName: '鍗楀湴鍧?, machineId: 'machine-003', status: 'COMPLETED', targetArea: 75, completedArea: 75, estimatedYield: 18, startTime: new Date().toISOString() }
+  { taskId: 'task-001', fieldName: '东地块', machineId: 'machine-001', status: 'IN_PROGRESS', targetArea: 100, completedArea: 45, estimatedYield: 25, startTime: new Date().toISOString() },
+  { taskId: 'task-002', fieldName: '西地块', machineId: 'machine-002', status: 'PENDING', targetArea: 80, completedArea: 0, estimatedYield: 20, startTime: new Date().toISOString() },
+  { taskId: 'task-003', fieldName: '南地块', machineId: 'machine-003', status: 'COMPLETED', targetArea: 75, completedArea: 75, estimatedYield: 18, startTime: new Date().toISOString() }
 ])
 
 export default {
   name: 'IntegratedView',
   setup() {
-    // 鏍囩椤电姸鎬?    const activeTab = ref('overview')
+    const activeTab = ref('overview')
     const activeNav = ref('home')
     const currentDateTime = ref('')
     
@@ -787,8 +787,8 @@ export default {
     // 鍒濆鍖栨椂鏇存柊涓€娆?    updateDateTime()
     // 姣忕鏇存柊涓€娆?    setInterval(updateDateTime, 1000)
     
-    // 澶勭悊鏍囩椤电偣鍑?    const handleTabClick = (tab) => {
-      // 涓嶉渶瑕乪mit锛屽彧鏇存柊鏈湴鐘舵€?    }
+    const handleTabClick = () => {
+    }
     
     // 绯荤粺姒傝鏁版嵁
     const onlineMachines = ref(5)
@@ -798,9 +798,9 @@ export default {
     const progressChart = ref(null)
     const yieldChart = ref(null)
     const recentTasks = ref([
-      { taskId: 'task-001', fieldName: '涓滃湴鍧?, machineId: 'machine-001', status: 'IN_PROGRESS', completedArea: 45 },
-      { taskId: 'task-002', fieldName: '瑗垮湴鍧?, machineId: 'machine-002', status: 'PENDING', completedArea: 0 },
-      { taskId: 'task-003', fieldName: '鍗楀湴鍧?, machineId: 'machine-003', status: 'COMPLETED', completedArea: 75 }
+      { taskId: 'task-001', fieldName: '东地块', machineId: 'machine-001', status: 'IN_PROGRESS', completedArea: 45 },
+      { taskId: 'task-002', fieldName: '西地块', machineId: 'machine-002', status: 'PENDING', completedArea: 0 },
+      { taskId: 'task-003', fieldName: '南地块', machineId: 'machine-003', status: 'COMPLETED', completedArea: 75 }
     ])
     
     // 鍐滄満绠＄悊鏁版嵁
@@ -823,12 +823,12 @@ export default {
       estimatedYield: 0
     })
     
-    // 浼犳劅鍣ㄦ暟鎹?    const selectedMachineId = ref('machine-001')
+    const selectedMachineId = ref('machine-001')
     const sensorData = ref([
-      { sensorType: 'speed', value: 8.5, unit: 'km/h', timestamp: new Date().toISOString(), location: '涓滃湴鍧? },
-      { sensorType: 'temperature', value: 65, unit: '鈩?, timestamp: new Date().toISOString(), location: '涓滃湴鍧? },
-      { sensorType: 'humidity', value: 55, unit: '%', timestamp: new Date().toISOString(), location: '涓滃湴鍧? },
-      { sensorType: 'pressure', value: 2.8, unit: 'bar', timestamp: new Date().toISOString(), location: '涓滃湴鍧? }
+      { sensorType: 'speed', value: 8.5, unit: 'km/h', timestamp: new Date().toISOString(), location: '东地块' },
+      { sensorType: 'temperature', value: 65, unit: '℃', timestamp: new Date().toISOString(), location: '东地块' },
+      { sensorType: 'humidity', value: 55, unit: '%', timestamp: new Date().toISOString(), location: '东地块' },
+      { sensorType: 'pressure', value: 2.8, unit: 'bar', timestamp: new Date().toISOString(), location: '东地块' }
     ])
     const speedChart = ref(null)
     const temperatureChart = ref(null)
@@ -864,8 +864,8 @@ export default {
     const routeInfo = ref([
       { key: '璺嚎闀垮害', value: '0 km' },
       { key: '棰勮鏃堕棿', value: '0 鍒嗛挓' },
-      { key: '閫旂粡鐐?, value: '0 涓? },
-      { key: '瑙勫垝妯″紡', value: '鏈€浼樿矾寰? }
+      { key: '途经点', value: '0 个' },
+      { key: '规划模式', value: '最优路径' }
     ])
     
     // 鑾峰彇鐢ㄦ埛褰撳墠浣嶇疆
@@ -881,7 +881,7 @@ export default {
           },
           (error) => {
             console.error('鑾峰彇浣嶇疆澶辫触:', error)
-            // 澶辫触鏃朵娇鐢ㄩ粯璁や綅缃?            mapUrl.value = `https://restapi.amap.com/v3/staticmap?key=${import.meta.env.VITE_AMAP_KEY || ''}&location=116.404,39.915&zoom=15&size=800*400&markers=mid,,A:116.404,39.915`
+            mapUrl.value = `https://restapi.amap.com/v3/staticmap?key=${import.meta.env.VITE_AMAP_KEY || ''}&location=116.404,39.915&zoom=15&size=800*400&markers=mid,,A:116.404,39.915`
           }
         )
       } else {
@@ -910,7 +910,7 @@ export default {
     const controlLogs = ref([])
     const attitudeChart = ref(null)
     
-    // 鏍煎紡鍖栨棩鏈?    const formatDate = (date) => {
+    const formatDate = (date) => {
       if (!date) return ''
       return new Date(date).toLocaleString()
     }
@@ -942,7 +942,7 @@ export default {
           machines.value[index] = { ...machineForm }
         }
       } else {
-        // 娣诲姞鏂板啘鏈?        machines.value.push({ ...machineForm, machineId: `machine-${machines.value.length + 1}`, lastUpdated: new Date().toISOString() })
+        machines.value.push({ ...machineForm, machineId: `machine-${machines.value.length + 1}`, lastUpdated: new Date().toISOString() })
       }
       dialogVisible.value = false
     }
@@ -987,7 +987,7 @@ export default {
       tasks.value = tasks.value.filter(t => t.taskId !== taskId)
     }
     
-    // 浼犳劅鍣ㄦ暟鎹柟娉?    const initSpeedChart = () => {
+    const initSpeedChart = () => {
       const chart = echarts.init(speedChart.value)
       const option = {
         backgroundColor: 'transparent',
@@ -1307,7 +1307,7 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: ['涓?, '鍗?, '瑗?, '鍖?, '涓?],
+          data: ['东', '南', '西', '北', '中'],
           splitArea: {
             show: true
           },
@@ -1348,7 +1348,7 @@ export default {
         },
         series: [
           {
-            name: '浜ч噺鍒嗗竷',
+            name: '产量分布',
             type: 'heatmap',
             data: [
               [0, 0, 65], [0, 1, 59], [0, 2, 80], [0, 3, 81], [0, 4, 56],
@@ -1376,11 +1376,11 @@ export default {
     // 鎺у埗绯荤粺鏂规硶
     const machineStatusText = computed(() => {
       switch (machineStatus.value) {
-        case 'WORKING': return '宸ヤ綔涓?
-        case 'STOPPED': return '宸插仠姝?
-        case 'PAUSED': return '宸叉殏鍋?
-        case 'ERROR': return '鏁呴殰'
-        default: return '鏈煡'
+        case 'WORKING': return '工作中'
+        case 'STOPPED': return '已停止'
+        case 'PAUSED': return '已暂停'
+        case 'ERROR': return '故障'
+        default: return '未知'
       }
     })
     
@@ -1411,8 +1411,8 @@ export default {
       routeInfo.value = [
         { key: '璺嚎闀垮害', value: '5.2 km' },
         { key: '棰勮鏃堕棿', value: '15 鍒嗛挓' },
-        { key: '閫旂粡鐐?, value: '3 涓? },
-        { key: '瑙勫垝妯″紡', value: routeForm.planningMode === 'shortest' ? '鏈€鐭矾寰? : routeForm.planningMode === 'optimal' ? '鏈€浼樿矾寰? : '閬块殰璺緞' }
+        { key: '途经点', value: '3 个' },
+        { key: '规划模式', value: routeForm.planningMode === 'shortest' ? '最短路径' : routeForm.planningMode === 'optimal' ? '最优路径' : '避障路径' }
       ]
       // 妯℃嫙鍦板浘鏄剧ず璺嚎
       initBeidouMap()
@@ -1440,7 +1440,7 @@ export default {
           }
         },
         legend: {
-          data: ['妯粴瑙?, '淇话瑙?, '鍋忚埅瑙?],
+          data: ['横滚角', '俯仰角', '偏航角'],
           textStyle: {
             color: '#ffffff'
           }
@@ -1486,7 +1486,7 @@ export default {
         },
         series: [
           {
-            name: '妯粴瑙?,
+            name: '横滚角',
             type: 'line',
             data: [0, 1, 2, 1.5, 2.5, 2, 1.5],
             itemStyle: {
@@ -1497,7 +1497,7 @@ export default {
             }
           },
           {
-            name: '淇话瑙?,
+            name: '俯仰角',
             type: 'line',
             data: [0, 0.5, 1, 0.8, 1.2, 1, 0.8],
             itemStyle: {
@@ -1508,7 +1508,7 @@ export default {
             }
           },
           {
-            name: '鍋忚埅瑙?,
+            name: '偏航角',
             type: 'line',
             data: [0, 0.2, 0.5, 0.3, 0.6, 0.4, 0.3],
             itemStyle: {
@@ -1548,7 +1548,7 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: ['涓滃湴鍧?, '瑗垮湴鍧?, '鍗楀湴鍧?, '鍖楀湴鍧?],
+          data: ['东地块', '西地块', '南地块', '北地块'],
           axisLine: {
             lineStyle: {
               color: '#00ffff'
@@ -1560,7 +1560,7 @@ export default {
         },
         yAxis: {
           type: 'value',
-          name: '瀹屾垚闈㈢Н(浜?',
+          name: '完成面积(亩)',
           nameTextStyle: {
             color: '#00ffff'
           },
@@ -1580,7 +1580,7 @@ export default {
         },
         series: [
           {
-            name: '瀹屾垚闈㈢Н',
+            name: '完成面积',
             type: 'bar',
             data: [45, 0, 75, 30],
             itemStyle: {
@@ -1599,7 +1599,7 @@ export default {
             }
           },
           {
-            name: '鐩爣闈㈢Н',
+            name: '目标面积',
             type: 'bar',
             data: [100, 80, 75, 90],
             itemStyle: {
@@ -1638,9 +1638,9 @@ export default {
             type: 'pie',
             radius: '50%',
             data: [
-              { value: 12, name: '涓滃湴鍧? },
-              { value: 8, name: '瑗垮湴鍧? },
-              { value: 5, name: '鍗楀湴鍧? }
+              { value: 12, name: '东地块' },
+              { value: 8, name: '西地块' },
+              { value: 5, name: '南地块' }
             ],
             itemStyle: {
               borderColor: '#0a0a20',
@@ -1666,7 +1666,7 @@ export default {
       chart.setOption(option)
     }
     
-    // 鍒濆鍖栧浘琛?    onMounted(() => {
+    onMounted(() => {
       initProgressChart()
       initYieldChart()
       initSpeedChart()
@@ -1677,7 +1677,7 @@ export default {
       initAttitudeChart()
     })
     
-    // 鍝嶅簲寮忚皟鏁?    window.addEventListener('resize', () => {
+    window.addEventListener('resize', () => {
       if (progressChart.value) progressChart.value.resize()
       if (yieldChart.value) yieldChart.value.resize()
       if (speedChart.value) speedChart.value.resize()
@@ -1689,7 +1689,7 @@ export default {
     })
     
     return {
-      // 鏍囩椤?      activeTab,
+      activeTab,
       activeNav,
       currentDateTime,
       handleTabClick,
@@ -1724,7 +1724,7 @@ export default {
       updateTaskStatus,
       deleteTask,
       
-      // 浼犳劅鍣ㄦ暟鎹?      selectedMachineId,
+      selectedMachineId,
       sensorData,
       speedChart,
       temperatureChart,
@@ -3237,4 +3237,6 @@ export default {
   }
 }
 </style>
+
+
 

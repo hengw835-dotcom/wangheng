@@ -1,57 +1,57 @@
-<template>
+﻿<template>
   <div class="home-container">
-    <!-- 背景效果 -->
+    <!-- 鑳屾櫙鏁堟灉 -->
     <div class="bg-effect">
       <div class="bg-grid"></div>
       <div class="bg-glow"></div>
     </div>
 
-    <!-- 系统标题 -->
+    <!-- 绯荤粺鏍囬 -->
     <div class="system-title">
-      <h1>智能农机收割系统</h1>
+      <h1>鏅鸿兘鍐滄満鏀跺壊绯荤粺</h1>
       <div class="title-subtitle">INTELLIGENT AGRICULTURAL MACHINERY SYSTEM</div>
       <div class="title-glow"></div>
     </div>
 
-    <!-- 系统概览 -->
+    <!-- 绯荤粺姒傝 -->
     <div class="overview-section">
       <div class="section-title">
-        <span>系统概览</span>
+        <span>绯荤粺姒傝</span>
         <div class="title-line"></div>
       </div>
       <div class="overview-stats">
         <div class="stat-card">
-          <div class="stat-icon">🚜</div>
+          <div class="stat-icon">馃殰</div>
           <el-statistic :value="onlineMachines" suffix="台" class="stat-value">
             <template #title>
-              <span class="stat-title">在线农机</span>
+              <span class="stat-title">鍦ㄧ嚎鍐滄満</span>
             </template>
           </el-statistic>
           <div class="stat-glow"></div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon">📋</div>
+          <div class="stat-icon">馃搵</div>
           <el-statistic :value="activeTasks" suffix="个" class="stat-value">
             <template #title>
-              <span class="stat-title">活跃任务</span>
+              <span class="stat-title">娲昏穬浠诲姟</span>
             </template>
           </el-statistic>
           <div class="stat-glow"></div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon">🌾</div>
+          <div class="stat-icon">馃尵</div>
           <el-statistic :value="todayHarvest" suffix="亩" class="stat-value">
             <template #title>
-              <span class="stat-title">今日收割面积</span>
+              <span class="stat-title">浠婃棩鏀跺壊闈㈢Н</span>
             </template>
           </el-statistic>
           <div class="stat-glow"></div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon">⚡</div>
+          <div class="stat-icon">⚖</div>
           <el-statistic :value="estimatedYield" suffix="吨" class="stat-value">
             <template #title>
-              <span class="stat-title">预估产量</span>
+              <span class="stat-title">棰勪及浜ч噺</span>
             </template>
           </el-statistic>
           <div class="stat-glow"></div>
@@ -59,17 +59,17 @@
       </div>
     </div>
 
-    <!-- 图表区域 -->
+    <!-- 鍥捐〃鍖哄煙 -->
     <div class="charts-section">
       <div class="section-title">
-        <span>数据可视化</span>
+        <span>鏁版嵁鍙鍖</span>
         <div class="title-line"></div>
       </div>
       <el-row :gutter="30">
         <el-col :span="12">
           <div class="chart-card">
             <div class="chart-header">
-              <span>收割进度</span>
+              <span>鏀跺壊杩涘害</span>
               <div class="header-glow"></div>
             </div>
             <div ref="progressChart" class="chart"></div>
@@ -79,7 +79,7 @@
         <el-col :span="12">
           <div class="chart-card">
             <div class="chart-header">
-              <span>产量分布</span>
+              <span>浜ч噺鍒嗗竷</span>
               <div class="header-glow"></div>
             </div>
             <div ref="yieldChart" class="chart"></div>
@@ -89,25 +89,25 @@
       </el-row>
     </div>
 
-    <!-- 任务列表 -->
+    <!-- 浠诲姟鍒楄〃 -->
     <div class="tasks-section">
       <div class="section-title">
-        <span>最近任务</span>
+        <span>鏈€杩戜换鍔</span>
         <div class="title-line"></div>
       </div>
       <div class="tasks-card">
         <el-table :data="recentTasks" class="tasks-table">
-          <el-table-column prop="taskId" label="任务ID" width="180">
+          <el-table-column prop="taskId" label="浠诲姟ID" width="180">
             <template #default="scope">
               <span class="table-cell">{{ scope.row.taskId }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="fieldName" label="地块名称">
+          <el-table-column prop="fieldName" label="鍦板潡鍚嶇О">
             <template #default="scope">
               <span class="table-cell">{{ scope.row.fieldName }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="machineId" label="农机ID" width="120">
+          <el-table-column prop="machineId" label="鍐滄満ID" width="120">
             <template #default="scope">
               <span class="table-cell">{{ scope.row.machineId }}</span>
             </template>
@@ -239,7 +239,6 @@ export default {
       }
       chart.setOption(option)
       
-      // 响应式调整
       window.addEventListener('resize', () => {
         chart.resize()
       })
@@ -297,7 +296,6 @@ export default {
       }
       chart.setOption(option)
       
-      // 响应式调整
       window.addEventListener('resize', () => {
         chart.resize()
       })
@@ -322,7 +320,7 @@ export default {
 </script>
 
 <style scoped>
-/* 全局样式 */
+/* 鍏ㄥ眬鏍峰紡 */
 .home-container {
   min-height: 100vh;
   padding: 20px;
@@ -332,7 +330,7 @@ export default {
   color: #ffffff;
 }
 
-/* 背景效果 */
+/* 鑳屾櫙鏁堟灉 */
 .bg-effect {
   position: fixed;
   top: 0;
@@ -366,7 +364,7 @@ export default {
   animation: glowPulse 4s ease-in-out infinite;
 }
 
-/* 系统标题 */
+/* 绯荤粺鏍囬 */
 .system-title {
   text-align: center;
   margin-bottom: 40px;
@@ -400,7 +398,7 @@ export default {
   animation: lineGlow 2s ease-in-out infinite;
 }
 
-/* 章节标题 */
+/* 绔犺妭鏍囬 */
 .section-title {
   display: flex;
   align-items: center;
@@ -421,7 +419,7 @@ export default {
   background: linear-gradient(90deg, #00ffff, transparent);
 }
 
-/* 概览统计 */
+/* 姒傝缁熻 */
 .overview-section {
   margin-bottom: 40px;
 }
@@ -481,7 +479,7 @@ export default {
   animation: lineGlow 2s ease-in-out infinite;
 }
 
-/* 图表区域 */
+/* 鍥捐〃鍖哄煙 */
 .charts-section {
   margin-bottom: 40px;
 }
@@ -535,7 +533,7 @@ export default {
   pointer-events: none;
 }
 
-/* 任务列表 */
+/* 浠诲姟鍒楄〃 */
 .tasks-section {
   margin-bottom: 40px;
 }
@@ -644,7 +642,7 @@ export default {
   text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
-/* 动画效果 */
+/* 鍔ㄧ敾鏁堟灉 */
 @keyframes gridMove {
   0% {
     transform: translate(0, 0);
@@ -692,7 +690,7 @@ export default {
   }
 }
 
-/* 响应式设计 */
+/* 鍝嶅簲寮忚璁?*/
 @media (max-width: 768px) {
   .home-container {
     padding: 10px;
@@ -717,3 +715,4 @@ export default {
   }
 }
 </style>
+
