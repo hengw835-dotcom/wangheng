@@ -76,3 +76,6 @@
 | `src/realtime/websocket.ts` 使用原生 WebSocket | 当前后端是 STOMP/SockJS `/ws`，broker `/topic`，app prefix `/app` | 需要重新实现或引入兼容客户端，不能直接复制 |
 | TypeScript DTO/types | 当前工程是 JavaScript，无 TS 构建脚本 | 可把 DTO 作为 JSDoc/适配层注释参考；不迁移 TS 编译链 |
 | Mock 数据与页面展示 | 当前后端已有真实接口和 demo capability 信号 | Mock 只能隔离在适配层或 demo 模式，不能让页面默认静默使用 |
+# Codex Merge Final Notes
+
+After stages 01-06, the active migrated frontend pages use the shared API layer rather than page-local `axios` calls. Remaining mentions of direct axios in older audit text are historical findings from stage 0. Sensor paging/sorting and report statistics remain frontend adapter behavior until backend pageable/statistics endpoints are added.

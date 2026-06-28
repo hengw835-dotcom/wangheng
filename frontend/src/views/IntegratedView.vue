@@ -875,7 +875,6 @@ export default {
           (position) => {
             const latitude = position.coords.latitude
             const longitude = position.coords.longitude
-            console.log('鑾峰彇鍒板綋鍓嶄綅缃?', latitude, longitude)
             
             // 浣跨敤楂樺痉鍦板浘闈欐€佸浘API
             mapUrl.value = `https://restapi.amap.com/v3/staticmap?key=${import.meta.env.VITE_AMAP_KEY || ''}&location=${longitude},${latitude}&zoom=15&size=800*400&markers=mid,,A:${longitude},${latitude}`
@@ -1287,7 +1286,6 @@ export default {
     }
     
     const startRecognition = () => {
-      // 妯℃嫙寮€濮嬭瘑鍒?      console.log('寮€濮嬭瘑鍒?)
       // 杩欓噷鍙互璋冪敤鍚庣API杩涜瀹為檯鐨凙I璇嗗埆
     }
     
@@ -1409,7 +1407,6 @@ export default {
     // 鍖楁枟鍗槦瀵艰埅鏂规硶
     const planRoute = () => {
       // 妯℃嫙璺嚎瑙勫垝
-      console.log('瑙勫垝璺嚎:', routeForm)
       // 鏇存柊璺嚎淇℃伅
       routeInfo.value = [
         { key: '璺嚎闀垮害', value: '5.2 km' },
@@ -1422,13 +1419,11 @@ export default {
     }
     
     const startNavigation = () => {
-      // 妯℃嫙寮€濮嬪鑸?      console.log('寮€濮嬪鑸?)
       // 杩欓噷鍙互娣诲姞瀵艰埅閫昏緫
     }
     
     const initBeidouMap = () => {
       // 鍒濆鍖栧湴鍥撅紝鑾峰彇褰撳墠浣嶇疆
-      console.log('寮€濮嬪垵濮嬪寲鍖楁枟鍗槦鍦板浘')
       getCurrentLocation()
     }
     
@@ -3242,3 +3237,4 @@ export default {
   }
 }
 </style>
+

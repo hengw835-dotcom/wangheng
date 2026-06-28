@@ -128,3 +128,18 @@ smart-harvester/
 2. 优化控制算法，提高农机的稳定性和效率
 3. 增加移动端应用，实现远程监控
 4. 开发数据分析和预测功能，提供决策支持
+# Codex Merge Status
+
+This repository has been merged against the enterprise frontend plan while preserving the existing backend contracts, auth model, routes, and Vite build system.
+
+Current verified commands:
+
+- Frontend tests: `node --test src/**/*.test.js` from `frontend`, passed 31/31.
+- Frontend build: `powershell -File ./scripts/build-win.ps1` from `frontend`, passed with existing large-chunk warnings for Element Plus/ECharts.
+- Backend tests: not run in this environment because Maven and `mvnw` are unavailable; Java 17 is installed.
+
+Important production settings:
+
+- `VITE_API_MODE=real` must be used for production. Mock mode is blocked by runtime config.
+- Browser control commands must go through backend `/emqx/machines/{machineId}/control`; do not expose MQTT credentials to the browser.
+- Sensor report pagination/statistics are currently frontend adapter logic because backend pageable/statistical endpoints are not present yet.

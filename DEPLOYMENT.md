@@ -141,3 +141,10 @@ docker compose --env-file .env.production -f docker-compose.prod.yml up -d
 - `MQTT_USERNAME`
 - `MQTT_PASSWORD`
 - EMQX 认证规则是否允许该客户端连接
+# Codex Merge Deployment Notes
+
+- Set `VITE_API_MODE=real` in production. `mock` mode is rejected by frontend runtime checks for production builds.
+- Keep `VITE_API_BASE_URL` empty when Nginx proxies `/api`, or set it to the deployed API prefix if the frontend is served separately.
+- Set `VITE_WS_URL` to the deployed backend WebSocket endpoint when STOMP/SockJS frontend integration is enabled.
+- Keep MQTT credentials server-side. Browser command control must continue to use backend EMQX audit endpoints.
+- Backend tests require Maven. This environment has Java 17 but no Maven or Maven wrapper; run `mvn test` during release packaging.

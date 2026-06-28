@@ -142,26 +142,21 @@ function getWeatherIcon(condition) {
 }
 
 async function fetchWeatherData(lat, lon) {
-  console.log('寮€濮嬭幏鍙栧ぉ姘旀暟鎹?)
   loading.value = true
   error.value = ''
   
   try {
-    // 浣跨敤OpenWeatherMap API鑾峰彇鐪熷疄鐨勫ぉ姘旀暟鎹?    console.log('浣跨敤OpenWeatherMap API鑾峰彇澶╂皵鏁版嵁锛屼綅缃?', lat, lon)
     
     const apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY || ''
     const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&lang=zh_cn&appid=${apiKey}`
-    console.log('API璇锋眰URL:', url)
     
     const response = await fetch(url)
-    console.log('API鍝嶅簲鐘舵€?', response.status)
     
     if (!response.ok) {
       throw new Error(`API璇锋眰澶辫触: ${response.status}`)
     }
     
     const data = await response.json()
-    console.log('API鍝嶅簲鏁版嵁:', data)
     
     // 澶勭悊澶╂皵鏁版嵁
     weatherData.value = {
@@ -174,7 +169,6 @@ async function fetchWeatherData(lat, lon) {
       location: '瀹佸鐞嗗伐瀛﹂櫌',
       icon: getWeatherIcon(data.weather[0].main)
     }
-    console.log('澶勭悊鍚庣殑澶╂皵鏁版嵁:', weatherData.value)
   } catch (err) {
     console.error('鑾峰彇澶╂皵鏁版嵁澶辫触:', err)
     // 澶辫触鏃朵娇鐢ㄩ粯璁ょ殑妯℃嫙鏁版嵁
@@ -188,20 +182,16 @@ async function fetchWeatherData(lat, lon) {
       location: '瀹佸鐞嗗伐瀛﹂櫌',
       icon: 'clear'
     }
-    console.log('浣跨敤榛樿妯℃嫙鏁版嵁:', weatherData.value)
   } finally {
     loading.value = false
-    console.log('loading鐘舵€佽缃负false')
   }
 }
 
 function getCurrentLocation() {
-  // 浣跨敤瀹佸鐞嗗伐瀛﹂櫌鐨勪綅缃幏鍙栧ぉ姘旀暟鎹?  console.log('浣跨敤瀹佸鐞嗗伐瀛﹂櫌浣嶇疆鑾峰彇澶╂皵鏁版嵁')
   fetchWeatherData(38.9702, 106.4141)
 }
 
 onMounted(() => {
-  console.log('WeatherPanel缁勪欢宸叉寕杞?)
   updateTime()
   timer = setInterval(updateTime, 1000)
   
@@ -439,4 +429,5 @@ onUnmounted(() => {
   100% { transform: translateY(5px); }
 }
 </style>
+
 

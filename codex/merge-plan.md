@@ -401,3 +401,24 @@ Notes:
 
 - Backend currently lacks report statistics and sensor pagination/sorting endpoints. The UI uses explicit frontend adapter functions for those gaps rather than presenting them as real backend statistics.
 - Sensor deletion follows the actual backend authorization model: DELETE requires ADMIN.
+## Stage 06 Final Hardening Execution Record
+
+Scope: executed `codex/tasks/06-final-hardening-review.md`.
+
+Changed files:
+
+| File | Change |
+|---|---|
+| `docs/MERGE_ACCEPTANCE.md` | Added final acceptance checklist, verification evidence, residual risks, and rollback guidance. |
+| `.env.production.example` | Added `VITE_API_MODE`, `VITE_BACKEND_TARGET`, and `VITE_WS_URL` production variables. |
+| `README.md` | Added Codex merge status, verified commands, and production notes. |
+| `DEPLOYMENT.md` | Added production hardening notes for API mode, WebSocket URL, MQTT credentials, and backend test prerequisite. |
+| `docs/API_CONTRACT_MATRIX.md` | Added final note clarifying historical axios risk text and current frontend adapter gaps. |
+| `frontend/src/views/IntegratedView.vue` and `frontend/src/components/left/WeatherPanel.vue` | Removed debug `console.log` statements. |
+
+Verification results for this stage:
+
+- `node --test src/**/*.test.js`: passed, 31/31 tests.
+- `powershell -File ./scripts/build-win.ps1`: passed; existing Element Plus/ECharts large-chunk warnings remain.
+- `rg -n "console\\.log|debugger" frontend/src backend/src/main/java`: no matches; ripgrep exit code 1 indicates no matches.
+- Backend Maven tests: not run because `mvn` and Maven wrapper are unavailable in this environment; Java 17 is installed.
