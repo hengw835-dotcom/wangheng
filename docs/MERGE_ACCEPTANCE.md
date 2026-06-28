@@ -29,7 +29,8 @@ The merge completed stages 01-06 for the existing target project. The reference 
 | `node --check` for changed frontend JS service/model files | Passed. |
 | `powershell -File ./scripts/build-win.ps1` from `frontend` | Passed. Vite build succeeded. |
 | `rg -n "console\\.log|debugger" frontend/src backend/src/main/java` | Passed, no matches; command exits 1 because ripgrep returns 1 when there are no matches. |
-| `where.exe mvn; .\mvnw.cmd test` fallback check | Not run. `mvn` and Maven wrapper are not available in this environment; Java 17 is available. |
+| Download Apache Maven 3.9.16 and verify SHA-512 | Passed; Maven unpacked under the user cache and `mvn -version` reports Java 17. |
+| `mvn test` from `backend` | Passed, 3/3 backend tests; BUILD SUCCESS. |
 
 ## Remaining Risks
 
@@ -39,7 +40,7 @@ The merge completed stages 01-06 for the existing target project. The reference 
 | Backend AI endpoint does not enforce upload size/MIME in controller | Frontend blocks common invalid uploads, but backend should still enforce limits. | Add backend multipart validation and tests. |
 | WebSocket frontend integration has no STOMP/SockJS client dependency | Realtime event push is not fully wired to backend `/ws`. | Approve and add a compatible STOMP/SockJS client, or expose native WebSocket endpoint. |
 | Vite build reports large Element Plus/ECharts chunks | First-load payload can be improved. | Split more page-level chunks and consider selective Element Plus imports. |
-| Backend tests were not executed locally | Backend regression confidence is lower than frontend. | Run `mvn test` in an environment with Maven or add Maven wrapper. |
+| Maven is not committed as a wrapper | Future machines still need Maven or a Maven wrapper. | Add Maven wrapper if repeatable backend testing should not depend on a local tool cache. |
 
 ## Rollback
 

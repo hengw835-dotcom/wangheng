@@ -136,7 +136,7 @@ Current verified commands:
 
 - Frontend tests: `node --test src/**/*.test.js` from `frontend`, passed 31/31.
 - Frontend build: `powershell -File ./scripts/build-win.ps1` from `frontend`, passed with existing large-chunk warnings for Element Plus/ECharts.
-- Backend tests: not run in this environment because Maven and `mvnw` are unavailable; Java 17 is installed.
+- Backend tests: Apache Maven 3.9.16 was downloaded to the user cache and `mvn test` passed, 3/3.
 
 Important production settings:
 

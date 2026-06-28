@@ -147,4 +147,4 @@ docker compose --env-file .env.production -f docker-compose.prod.yml up -d
 - Keep `VITE_API_BASE_URL` empty when Nginx proxies `/api`, or set it to the deployed API prefix if the frontend is served separately.
 - Set `VITE_WS_URL` to the deployed backend WebSocket endpoint when STOMP/SockJS frontend integration is enabled.
 - Keep MQTT credentials server-side. Browser command control must continue to use backend EMQX audit endpoints.
-- Backend tests require Maven. This environment has Java 17 but no Maven or Maven wrapper; run `mvn test` during release packaging.
+- Backend tests require Maven. Apache Maven 3.9.16 was downloaded to the user cache for local verification, and `mvn test` passed, 3/3.

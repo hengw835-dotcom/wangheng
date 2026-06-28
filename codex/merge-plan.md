@@ -421,4 +421,4 @@ Verification results for this stage:
 - `node --test src/**/*.test.js`: passed, 31/31 tests.
 - `powershell -File ./scripts/build-win.ps1`: passed; existing Element Plus/ECharts large-chunk warnings remain.
 - `rg -n "console\\.log|debugger" frontend/src backend/src/main/java`: no matches; ripgrep exit code 1 indicates no matches.
-- Backend Maven tests: not run because `mvn` and Maven wrapper are unavailable in this environment; Java 17 is installed.
+- Backend Maven tests: Apache Maven 3.9.16 was downloaded to the user cache after user approval, SHA-512 verified, and `mvn test` passed, 3/3 backend tests with BUILD SUCCESS.
