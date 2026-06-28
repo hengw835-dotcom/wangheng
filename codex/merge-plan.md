@@ -345,3 +345,29 @@
 - Dashboard 数据不再在组件内写死生产样例，改由 `useDashboardStore` 和 `dashboardModel` 生成。
 - ECharts 图表组件已实现 resize/dispose 生命周期。
 - 浏览器自动化登录受工具连接超时影响，保留为未完成的人工视觉复核项；本轮没有开始下一阶段。
+## Stage 04 Runtime Control Execution Record
+
+Scope: executed `codex/tasks/04-realtime-control.md` only. No UI migration for later AI, sensor, simulator, report, or final hardening stages was started.
+
+Changed files:
+
+| File | Change |
+|---|---|
+| `frontend/src/views/ControlSystem.vue` | Migrated realtime control page to the unified EMQX API layer; added real machine-status command gating, duplicate-send loading guard, parameter range validation, command ID display, audit polling, failure reason display, and cleanup on unmount. |
+| `frontend/src/services/api.js` | Added EMQX audit list and by-command API methods while preserving backend `Idempotency-Key` command submission. |
+| `frontend/src/utils/controlModel.js` | Added command lifecycle mapping, backend command/status constraints, parameter validation, bounded reconnect-delay calculation, and duplicate subscription registry. |
+| `frontend/src/utils/controlModel.test.js` | Added tests for command state machine, validation, reconnect delay, and duplicate subscription cleanup. |
+
+Verification commands and results:
+
+| Command | Result |
+|---|---|
+| `node --test src/utils/controlModel.test.js` | Passed, 5/5 tests. |
+| `node --check src/utils/controlModel.js; node --check src/services/api.js` | Passed. |
+| `node --test src/**/*.test.js` | Passed, 25/25 tests. |
+| `powershell -File ./scripts/build-win.ps1` | Passed, Vite build succeeded; existing Element Plus/ECharts large-chunk warning remains. |
+
+Notes:
+
+- Browser-side production MQTT credentials were not introduced; control remains routed through backend `/emqx/machines/{machineId}/control`.
+- STOMP/SockJS runtime dependency was not installed. This stage adds reconnect/backoff and subscription dedupe logic as dependency-free frontend model code, with integration left constrained by the current dependency policy.

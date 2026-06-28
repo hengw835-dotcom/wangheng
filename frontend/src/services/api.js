@@ -101,6 +101,21 @@ export const emqxApi = {
   async getStatus(config) {
     return unwrapApiResponse(await apiClient.get('/api/emqx/status', config))
   },
+  async listAudits(config) {
+    const data = unwrapApiResponse(await apiClient.get('/api/emqx/control-audits', config))
+    return Array.isArray(data) ? data : []
+  },
+  async getAuditByCommand(commandId, config = {}) {
+    return unwrapApiResponse(
+      await apiClient.get('/api/emqx/control-audits/by-command', {
+        ...config,
+        params: {
+          ...(config.params || {}),
+          commandId
+        }
+      })
+    )
+  },
   async sendControl(machineId, command, parameters = {}, config = {}) {
     return unwrapApiResponse(
       await apiClient.post(

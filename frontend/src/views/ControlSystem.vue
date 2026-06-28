@@ -7,7 +7,7 @@
         <div>
           <span class="eyebrow">REALTIME CONTROL</span>
           <h1>实时控制</h1>
-          <p>通过 EMQX 发布控制命令，并保留后端审计记录。未连接 EMQX 时禁止发送控制命令。</p>
+          <p>控制命令统一通过后端 EMQX 审计接口下发，前端只展示发布、回执、失败和超时状态。</p>
         </div>
         <div class="connection-card" :class="{ offline: !emqx.connected }">
           <span class="state-dot"></span>
@@ -23,7 +23,7 @@
           <header class="panel-head">
             <div>
               <h2>控制命令</h2>
-              <p>选择设备后发送 START / PAUSE / RESUME / STOP / APPLY_PARAMS</p>
+              <p>命令会按设备真实状态校验，避免重复提交和越权直连 MQTT。</p>
             </div>
             <el-button text type="primary" @click="refreshAll">刷新状态</el-button>
           </header>
@@ -31,43 +31,55 @@
           <el-form label-position="top">
             <el-form-item label="目标农机">
               <el-select v-model="selectedMachineId" filterable placeholder="请选择农机">
-                <el-option v-for="machine in machines" :key="machine.machineId" :label="machine.machineId" :value="machine.machineId" />
+                <el-option
+                  v-for="machine in machines"
+                  :key="machine.machineId"
+                  :label="machine.machineId"
+                  :value="machine.machineId"
+                />
               </el-select>
             </el-form-item>
 
             <div class="button-grid">
-              <el-button type="primary" :disabled="!canSend" @click="sendCommand('START')">启动</el-button>
-              <el-button type="warning" :disabled="!canSend" @click="sendCommand('PAUSE')">暂停</el-button>
-              <el-button type="success" :disabled="!canSend" @click="sendCommand('RESUME')">恢复</el-button>
-              <el-button type="danger" :disabled="!canSend" @click="sendCommand('STOP')">停止</el-button>
+              <el-button type="primary" :loading="sendingCommand === 'START'" :disabled="!canSendCommand('START')" @click="sendCommand('START')">启动</el-button>
+              <el-button type="warning" :loading="sendingCommand === 'PAUSE'" :disabled="!canSendCommand('PAUSE')" @click="sendCommand('PAUSE')">暂停</el-button>
+              <el-button type="success" :loading="sendingCommand === 'RESUME'" :disabled="!canSendCommand('RESUME')" @click="sendCommand('RESUME')">恢复</el-button>
+              <el-button type="danger" :loading="sendingCommand === 'STOP'" :disabled="!canSendCommand('STOP')" @click="sendCommand('STOP')">停止</el-button>
             </div>
 
             <el-divider />
 
             <div class="params-grid">
-              <el-form-item label="目标速度 km/h">
+              <el-form-item label="目标速度 km/h" :error="paramErrors.targetSpeed">
                 <el-input-number v-model="params.targetSpeed" :min="0" :max="20" :precision="1" />
               </el-form-item>
-              <el-form-item label="割台高度 cm">
+              <el-form-item label="割台高度 cm" :error="paramErrors.cuttingHeight">
                 <el-input-number v-model="params.cuttingHeight" :min="0" :max="100" />
               </el-form-item>
-              <el-form-item label="喂入量 %">
+              <el-form-item label="喂入量 %" :error="paramErrors.feedingRate">
                 <el-input-number v-model="params.feedingRate" :min="0" :max="100" />
               </el-form-item>
             </div>
-            <el-button type="primary" plain :disabled="!canSend" @click="sendCommand('APPLY_PARAMS', params)">应用参数</el-button>
+            <el-button type="primary" plain :loading="sendingCommand === 'APPLY_PARAMS'" :disabled="!canSendCommand('APPLY_PARAMS')" @click="sendCommand('APPLY_PARAMS', params)">应用参数</el-button>
           </el-form>
 
           <el-alert v-if="!emqx.connected" class="tip" type="warning" :closable="false" show-icon>
-            <template #title>EMQX 未连接，请先启动 EMQX 并确认后端 MQTT 配置。</template>
+            <template #title>EMQX 未连接，控制命令将被禁用，请先确认后端 MQTT 配置。</template>
           </el-alert>
+
+          <section class="command-state">
+            <span>当前设备状态：{{ selectedMachine?.status || '--' }}</span>
+            <span>命令状态：<b>{{ commandState }}</b></span>
+            <span v-if="lastCommand.commandId">命令 ID：{{ lastCommand.commandId }}</span>
+            <span v-if="lastCommand.error" class="error-text">失败原因：{{ lastCommand.error }}</span>
+          </section>
         </article>
 
         <article class="panel">
           <header class="panel-head">
             <div>
               <h2>命令审计</h2>
-              <p>展示最近 100 条控制命令、操作者、主题和发布状态。</p>
+              <p>展示最近控制命令、操作人、主题、命令 ID 和回执状态。</p>
             </div>
           </header>
 
@@ -78,11 +90,15 @@
             </el-table-column>
             <el-table-column prop="machineId" label="设备" min-width="120" />
             <el-table-column prop="commandName" label="命令" min-width="130" />
-            <el-table-column prop="operatorName" label="操作者" min-width="110" />
+            <el-table-column prop="operatorName" label="操作人" min-width="110" />
             <el-table-column prop="status" label="状态" min-width="120">
-              <template #default="{ row }"><el-tag :type="auditType(row.status)">{{ row.status }}</el-tag></template>
+              <template #default="{ row }">
+                <el-tag :type="auditType(row.status)">{{ commandStateFromAudit(row) }}</el-tag>
+              </template>
             </el-table-column>
+            <el-table-column prop="commandId" label="命令 ID" min-width="220" show-overflow-tooltip />
             <el-table-column prop="topic" label="MQTT Topic" min-width="220" show-overflow-tooltip />
+            <el-table-column prop="errorMessage" label="失败原因" min-width="180" show-overflow-tooltip />
           </el-table>
         </article>
       </section>
@@ -91,20 +107,32 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref } from 'vue'
-import axios from 'axios'
+import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import TopNavBar from '../components/layout/TopNavBar.vue'
 import { useMachineStore } from '../store'
+import { emqxApi } from '../services/api'
+import {
+  COMMAND_STATES,
+  canSendControlCommand,
+  commandStateFromAudit,
+  hasControlErrors,
+  validateControlParameters
+} from '../utils/controlModel'
 
 const machineStore = useMachineStore()
 const selectedMachineId = ref('')
 const audits = ref([])
 const emqx = reactive({ connected: false, broker: '', clientId: '' })
 const params = reactive({ targetSpeed: 8, cuttingHeight: 35, feedingRate: 65 })
+const paramErrors = reactive({})
+const lastCommand = reactive({ commandId: '', status: '', error: '' })
+const commandState = ref(COMMAND_STATES.READY)
+const sendingCommand = ref('')
+let auditTimer
 
 const machines = computed(() => machineStore.machines || [])
-const canSend = computed(() => emqx.connected && selectedMachineId.value)
+const selectedMachine = computed(() => machines.value.find(machine => machine.machineId === selectedMachineId.value))
 
 async function refreshAll() {
   await Promise.allSettled([machineStore.fetchMachines(), refreshEmqx(), refreshAudits()])
@@ -112,31 +140,70 @@ async function refreshAll() {
 }
 
 async function refreshEmqx() {
-  const { data } = await axios.get('/api/emqx/status')
-  Object.assign(emqx, data)
+  Object.assign(emqx, await emqxApi.getStatus())
 }
 
 async function refreshAudits() {
-  const { data } = await axios.get('/api/emqx/control-audits')
-  audits.value = data
+  audits.value = await emqxApi.listAudits()
+  if (lastCommand.commandId) {
+    const match = audits.value.find(item => item.commandId === lastCommand.commandId)
+    if (match) commandState.value = commandStateFromAudit(match)
+  }
 }
 
 async function sendCommand(command, parameters = {}) {
-  if (!canSend.value) return
-  const key = `${Date.now()}-${crypto.randomUUID?.() || Math.random().toString(16).slice(2)}`
-  const { data } = await axios.post(`/api/emqx/machines/${encodeURIComponent(selectedMachineId.value)}/control`, {
-    command,
-    parameters
-  }, {
-    headers: { 'Idempotency-Key': key }
-  })
-  ElMessage.success(`命令已提交：${data.command} / ${data.status}`)
-  await refreshAudits()
+  if (!canSendCommand(command)) return
+  Object.keys(paramErrors).forEach(key => delete paramErrors[key])
+  if (command === 'APPLY_PARAMS') {
+    Object.assign(paramErrors, validateControlParameters(parameters))
+    if (hasControlErrors(paramErrors)) return
+  }
+  sendingCommand.value = command
+  commandState.value = COMMAND_STATES.SENDING
+  lastCommand.error = ''
+  try {
+    const data = await emqxApi.sendControl(selectedMachineId.value, command, parameters)
+    lastCommand.commandId = data.commandId
+    lastCommand.status = data.status
+    commandState.value = data.published ? COMMAND_STATES.ACCEPTED : COMMAND_STATES.FAILED
+    ElMessage.success(`命令已提交：${data.command} / ${data.status}`)
+    await refreshAudits()
+    startAuditPolling()
+  } catch (error) {
+    commandState.value = COMMAND_STATES.FAILED
+    lastCommand.error = error?.response?.data?.message || error?.message || '命令发送失败'
+    throw error
+  } finally {
+    sendingCommand.value = ''
+  }
+}
+
+function canSendCommand(command) {
+  return Boolean(
+    emqx.connected &&
+    selectedMachineId.value &&
+    selectedMachine.value &&
+    canSendControlCommand(command, selectedMachine.value.status) &&
+    !sendingCommand.value
+  )
+}
+
+function startAuditPolling() {
+  window.clearInterval(auditTimer)
+  let ticks = 0
+  auditTimer = window.setInterval(async () => {
+    ticks += 1
+    await refreshAudits()
+    if ([COMMAND_STATES.SUCCEEDED, COMMAND_STATES.FAILED].includes(commandState.value) || ticks >= 10) {
+      if (ticks >= 10 && commandState.value === COMMAND_STATES.ACCEPTED) commandState.value = COMMAND_STATES.TIMEOUT
+      window.clearInterval(auditTimer)
+    }
+  }, 3000)
 }
 
 function auditType(status) {
   if (['PUBLISHED', 'ACKNOWLEDGED'].includes(status)) return 'success'
-  if (status === 'FAILED' || status === 'REJECTED') return 'danger'
+  if (['FAILED', 'REJECTED'].includes(status)) return 'danger'
   return 'warning'
 }
 
@@ -146,6 +213,7 @@ function formatTime(value) {
 }
 
 onMounted(refreshAll)
+onBeforeUnmount(() => window.clearInterval(auditTimer))
 </script>
 
 <style scoped>
@@ -165,5 +233,10 @@ p, small { color: var(--app-text-muted); }
 .panel-head h2 { color: #fff; }
 .button-grid, .params-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .tip { margin-top: 16px; }
-@media (max-width: 1100px) { .content-grid, .page-head { grid-template-columns: 1fr; flex-direction: column; align-items: stretch; } }
+.command-state { display: grid; gap: 8px; margin-top: 16px; color: var(--app-text-muted); }
+.command-state b { color: #22d983; }
+.error-text { color: #ff6f7c; }
+@media (max-width: 1100px) {
+  .content-grid, .page-head { grid-template-columns: 1fr; flex-direction: column; align-items: stretch; }
+}
 </style>
