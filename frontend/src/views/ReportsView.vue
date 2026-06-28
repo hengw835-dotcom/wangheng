@@ -7,7 +7,7 @@
         <div>
           <span class="eyebrow">DATA REPORTS</span>
           <h1>数据报表</h1>
-          <p>基于真实设备、任务和传感器记录生成汇总，不再展示假运输车辆和固定产量。</p>
+          <p>设备和任务来自真实接口；传感器统计使用可替换前端聚合适配层，等待后端统计 API 后可直接替换。</p>
         </div>
         <el-button type="primary" @click="exportReport">导出 CSV</el-button>
       </section>
@@ -67,10 +67,11 @@
 
 <script setup>
 import { computed, onMounted, reactive } from 'vue'
-import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import TopNavBar from '../components/layout/TopNavBar.vue'
+import { sensorDataApi } from '../services/api'
 import { useMachineStore, useTaskStore } from '../store'
+import { buildReportRows, summarizeSensors, toCsv } from '../utils/analyticsModel'
 
 const machineStore = useMachineStore()
 const taskStore = useTaskStore()
@@ -114,21 +115,12 @@ function formatTime(value) {
 }
 
 async function loadSensorSummary() {
-  const { data: ids } = await axios.get('/api/sensor-data/machines')
-  sensorSummary.machineCount = ids.length
-  sensorSummary.total = 0
-  sensorSummary.latestMachine = ''
-  sensorSummary.latestTime = ''
-
-  for (const id of ids) {
-    const { data: records } = await axios.get(`/api/sensor-data/machine/${encodeURIComponent(id)}`)
-    sensorSummary.total += records.length
-    const latest = records[records.length - 1]
-    if (latest && (!sensorSummary.latestTime || new Date(latest.timestamp) > new Date(sensorSummary.latestTime))) {
-      sensorSummary.latestTime = latest.timestamp
-      sensorSummary.latestMachine = id
-    }
-  }
+  const ids = await sensorDataApi.listMachines()
+  const recordsByMachine = {}
+  await Promise.all(ids.map(async id => {
+    recordsByMachine[id] = await sensorDataApi.listByMachine(id)
+  }))
+  Object.assign(sensorSummary, summarizeSensors(recordsByMachine))
 }
 
 async function refresh() {
@@ -136,13 +128,11 @@ async function refresh() {
 }
 
 function exportReport() {
-  const rows = [
-    ['类型', '编号', '名称/地块', '状态', '面积', '产量'],
-    ...tasks.value.map(task => ['任务', task.taskId, task.fieldName, statusLabel(task.status), numberText(task.completedArea), numberText(task.estimatedYield)]),
-    ...machines.value.map(machine => ['设备', machine.machineId, machine.model, machineStatusLabel(machine.status), '', ''])
-  ]
-  const csv = rows.map(row => row.map(value => `"${String(value ?? '').replaceAll('"', '""')}"`).join(',')).join('\n')
-  const blob = new Blob([`\ufeff${csv}`], { type: 'text/csv;charset=utf-8;' })
+  const rows = buildReportRows(
+    { machines: machines.value, tasks: tasks.value, sensorSummary },
+    { statusLabel, machineStatusLabel }
+  )
+  const blob = new Blob([`\ufeff${toCsv(rows)}`], { type: 'text/csv;charset=utf-8;' })
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url

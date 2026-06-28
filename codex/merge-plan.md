@@ -371,3 +371,33 @@ Notes:
 
 - Browser-side production MQTT credentials were not introduced; control remains routed through backend `/emqx/machines/{machineId}/control`.
 - STOMP/SockJS runtime dependency was not installed. This stage adds reconnect/backoff and subscription dedupe logic as dependency-free frontend model code, with integration left constrained by the current dependency policy.
+## Stage 05 AI Sensors Reports Execution Record
+
+Scope: executed `codex/tasks/05-ai-sensors-reports.md` only. No final hardening changes were started in this stage.
+
+Changed files:
+
+| File | Change |
+|---|---|
+| `frontend/src/services/api.js` | Added AI vision, sensor data, and sensor simulator API adapters; expanded sensor data query/delete methods. |
+| `frontend/src/services/permissions.js` | Added `sensor:delete` mapped to ADMIN, matching backend DELETE rules. |
+| `frontend/src/utils/analyticsModel.js` | Added AI image validation, detection box normalization, sensor filter/sort/pagination, simulator validation, sensor summary, report rows, and CSV encoding helpers. |
+| `frontend/src/utils/analyticsModel.test.js` | Added boundary tests for AI upload, boxes, sensor paging, simulator input, CSV escaping, and sensor summary. |
+| `frontend/src/views/AIVision.vue` | Migrated from direct axios to `aiVisionApi`; added MIME/size validation, preview cleanup, backend pixel-box overlay, and error state. |
+| `frontend/src/views/SensorData.vue` | Migrated to `sensorDataApi`; added device/type/time filters, frontend paging/sorting adapter, unit display, and ADMIN-only delete affordance. |
+| `frontend/src/views/SensorSimulator.vue` | Migrated to `sensorSimulatorApi`; added idempotent button states, backend-constraint validation, status sync, and record refresh. |
+| `frontend/src/views/ReportsView.vue` | Migrated sensor reads to API layer; reports now use true machine/task APIs and explicitly labeled replaceable frontend sensor aggregation. |
+
+Verification commands and results:
+
+| Command | Result |
+|---|---|
+| `node --test src/utils/analyticsModel.test.js` | Passed, 6/6 tests. |
+| `node --check src/utils/analyticsModel.js; node --check src/services/api.js; node --check src/services/permissions.js` | Passed. |
+| `node --test src/**/*.test.js` | Passed, 31/31 tests. |
+| `powershell -File ./scripts/build-win.ps1` | Passed, Vite build succeeded; existing Element Plus/ECharts large-chunk warning remains. |
+
+Notes:
+
+- Backend currently lacks report statistics and sensor pagination/sorting endpoints. The UI uses explicit frontend adapter functions for those gaps rather than presenting them as real backend statistics.
+- Sensor deletion follows the actual backend authorization model: DELETE requires ADMIN.

@@ -88,12 +88,76 @@ export const taskApi = {
 }
 
 export const sensorDataApi = {
+  async listMachines(config) {
+    const data = unwrapApiResponse(await apiClient.get('/api/sensor-data/machines', config))
+    return Array.isArray(data) ? data.map(String) : []
+  },
   async listByMachine(machineId, config) {
     const data = unwrapApiResponse(await apiClient.get(`/api/sensor-data/machine/${machineId}`, config))
     return Array.isArray(data) ? data.map(toSensorDataDto) : []
   },
+  async listByMachineAndType(machineId, sensorType, config) {
+    const data = unwrapApiResponse(await apiClient.get(`/api/sensor-data/machine/${machineId}/type/${sensorType}`, config))
+    return Array.isArray(data) ? data.map(toSensorDataDto) : []
+  },
+  async listByTimeRange(machineId, start, end, config = {}) {
+    const data = unwrapApiResponse(
+      await apiClient.get(`/api/sensor-data/machine/${machineId}/time-range`, {
+        ...config,
+        params: {
+          ...(config.params || {}),
+          start,
+          end
+        }
+      })
+    )
+    return Array.isArray(data) ? data.map(toSensorDataDto) : []
+  },
   async create(sensorData, config) {
     return toSensorDataDto(unwrapApiResponse(await apiClient.post('/api/sensor-data', sensorData, config)))
+  },
+  async delete(id, config) {
+    return unwrapApiResponse(await apiClient.delete(`/api/sensor-data/${id}`, config))
+  }
+}
+
+export const aiVisionApi = {
+  async detect(image, config = {}) {
+    const body = new FormData()
+    body.append('image', image)
+    const data = unwrapApiResponse(await apiClient.post('/api/ai-vision/detect', body, config))
+    return Array.isArray(data) ? data : []
+  },
+  async getYieldDistribution(fieldId, config) {
+    return unwrapApiResponse(await apiClient.get(`/api/ai-vision/yield-distribution/${fieldId}`, config))
+  }
+}
+
+export const sensorSimulatorApi = {
+  async getStatus(config) {
+    return unwrapApiResponse(await apiClient.get('/api/sensor-simulator/status', config))
+  },
+  async start(machineId, config = {}) {
+    return unwrapApiResponse(
+      await apiClient.post('/api/sensor-simulator/start', null, {
+        ...config,
+        params: { ...(config.params || {}), machineId }
+      })
+    )
+  },
+  async stop(config) {
+    return unwrapApiResponse(await apiClient.post('/api/sensor-simulator/stop', null, config))
+  },
+  async publishOnce(machineId, config = {}) {
+    return unwrapApiResponse(
+      await apiClient.post('/api/sensor-simulator/publish-once', null, {
+        ...config,
+        params: { ...(config.params || {}), machineId }
+      })
+    )
+  },
+  async publish(reading, config) {
+    return unwrapApiResponse(await apiClient.post('/api/sensor-simulator/publish', reading, config))
   }
 }
 

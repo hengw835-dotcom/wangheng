@@ -28,6 +28,7 @@ export const ACTION_PERMISSIONS = {
   'task:delete': [ROLE_ADMIN],
   'task:progress': [ROLE_ADMIN, ROLE_DISPATCHER, ROLE_DRIVER],
   'sensor:create': [ROLE_ADMIN, ROLE_DRIVER],
+  'sensor:delete': [ROLE_ADMIN],
   'control:send': [ROLE_ADMIN, ROLE_DISPATCHER]
 }
 

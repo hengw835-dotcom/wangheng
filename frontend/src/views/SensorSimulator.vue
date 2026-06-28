@@ -7,7 +7,7 @@
         <div>
           <span class="eyebrow">MQTT SENSOR LAB</span>
           <h1>模拟平台</h1>
-          <p>手动向 EMQX 发布模拟传感器数据，用于验证后端订阅和前端刷新链路。</p>
+          <p>通过后端模拟器发布传感器数据，前端只同步运行状态和入库结果。</p>
         </div>
         <div class="connection-card" :class="{ offline: !status.mqttConnected }">
           <span class="state-dot"></span>
@@ -22,32 +22,32 @@
         <article class="panel">
           <header><h2>发布控制</h2><el-tag :type="status.running ? 'success' : 'info'">{{ status.running ? '连续发送中' : '手动模式' }}</el-tag></header>
           <el-form label-position="top">
-            <el-form-item label="模拟设备编号">
+            <el-form-item label="模拟设备编号" :error="machineIdError">
               <el-input v-model.trim="machineId" placeholder="例如 SIM-001" />
             </el-form-item>
             <div class="button-row">
-              <el-button type="primary" :loading="busy" @click="publishBatch">发送一组随机数据</el-button>
-              <el-button type="success" :disabled="status.running" @click="start">开启连续发送</el-button>
-              <el-button type="danger" plain :disabled="!status.running" @click="stop">停止连续发送</el-button>
+              <el-button type="primary" :loading="busyAction === 'publishOnce'" :disabled="isBusy" @click="publishBatch">发送一组随机数据</el-button>
+              <el-button type="success" :loading="busyAction === 'start'" :disabled="isBusy || status.running" @click="start">开启连续发送</el-button>
+              <el-button type="danger" plain :loading="busyAction === 'stop'" :disabled="isBusy || !status.running" @click="stop">停止连续发送</el-button>
             </div>
           </el-form>
-          <div class="flow"><span>前端模拟平台</span><i>→</i><span>EMQX</span><i>→</i><span>后端订阅</span><i>→</i><span>数据库</span></div>
+          <div class="flow"><span>前端模拟平台</span><i>→</i><span>后端模拟器</span><i>→</i><span>EMQX</span><i>→</i><span>数据库</span></div>
         </article>
 
         <article class="panel">
           <header><h2>自定义传感器数据</h2><span>单条精准模拟</span></header>
           <el-form label-position="top">
             <div class="form-grid">
-              <el-form-item label="传感器类型">
+              <el-form-item label="传感器类型" :error="formErrors.sensorType">
                 <el-select v-model="form.sensorType">
                   <el-option v-for="item in sensorTypes" :key="item.type" :label="item.label" :value="item.type" />
                 </el-select>
               </el-form-item>
-              <el-form-item label="数值"><el-input-number v-model="form.value" :precision="2" :controls="false" /></el-form-item>
-              <el-form-item label="单位"><el-input v-model="form.unit" /></el-form-item>
-              <el-form-item label="安装位置"><el-input v-model="form.location" /></el-form-item>
+              <el-form-item label="数值" :error="formErrors.value"><el-input-number v-model="form.value" :precision="2" :controls="false" /></el-form-item>
+              <el-form-item label="单位" :error="formErrors.unit"><el-input v-model="form.unit" /></el-form-item>
+              <el-form-item label="安装位置" :error="formErrors.location"><el-input v-model="form.location" /></el-form-item>
             </div>
-            <el-button type="primary" :loading="busy" @click="publishCustom">发布自定义数据</el-button>
+            <el-button type="primary" :loading="busyAction === 'publishCustom'" :disabled="isBusy" @click="publishCustom">发布自定义数据</el-button>
           </el-form>
         </article>
 
@@ -67,7 +67,7 @@
           <header><h2>发布日志</h2><span>{{ logs.length }} 条</span></header>
           <div class="console">
             <p v-for="(log, index) in logs" :key="index"><time>{{ log.time }}</time><span :class="log.level">{{ log.message }}</span></p>
-            <p v-if="!logs.length" class="empty">等待发送操作...</p>
+            <p v-if="!logs.length" class="empty">等待发布操作...</p>
           </div>
         </article>
       </section>
@@ -77,15 +77,17 @@
 
 <script setup>
 import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
-import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import TopNavBar from '../components/layout/TopNavBar.vue'
+import { sensorDataApi, sensorSimulatorApi } from '../services/api'
+import { validateMachineId, validateSimulatorReading } from '../utils/analyticsModel'
 
 const machineId = ref('SIM-001')
-const busy = ref(false)
+const busyAction = ref('')
 const records = ref([])
 const logs = ref([])
 const status = reactive({ running: false, mqttConnected: false, publishedCount: 0, topic: '' })
+const formErrors = reactive({})
 const sensorTypes = [
   { type: 'temperature', label: '温度', unit: 'C', value: 28 },
   { type: 'humidity', label: '湿度', unit: '%', value: 58 },
@@ -96,6 +98,8 @@ const sensorTypes = [
 const form = reactive({ sensorType: 'temperature', value: 28, unit: 'C', location: '模拟驾驶舱' })
 const topic = computed(() => `harvester/${machineId.value}/sensor`)
 const latestRecords = computed(() => [...records.value].reverse().slice(0, 30))
+const isBusy = computed(() => Boolean(busyAction.value))
+const machineIdError = computed(() => validateMachineId(machineId.value))
 let timer
 
 watch(() => form.sensorType, type => {
@@ -109,51 +113,55 @@ function addLog(message, level = 'success') {
 }
 
 async function refreshStatus() {
-  const { data } = await axios.get('/api/sensor-simulator/status')
+  const data = await sensorSimulatorApi.getStatus()
   Object.assign(status, data)
   if (data.machineId) machineId.value = data.machineId
 }
 
 async function refreshRecords() {
   if (!machineId.value) return
-  const { data } = await axios.get(`/api/sensor-data/machine/${encodeURIComponent(machineId.value)}`)
-  records.value = data
+  records.value = await sensorDataApi.listByMachine(machineId.value)
 }
 
-async function run(action, successMessage) {
-  if (!/^[A-Za-z0-9_-]+$/.test(machineId.value)) {
-    ElMessage.warning('设备编号只能包含字母、数字、下划线和连字符')
+async function run(actionName, action, successMessage) {
+  const error = validateMachineId(machineId.value)
+  if (error) {
+    ElMessage.warning(error)
     return
   }
-  busy.value = true
+  if (busyAction.value) return
+  busyAction.value = actionName
   try {
     await action()
     addLog(successMessage)
     ElMessage.success(successMessage)
     await Promise.allSettled([refreshStatus(), refreshRecords()])
-  } catch (error) {
-    const message = error.response?.data?.message || error.message || '操作失败'
+  } catch (caught) {
+    const message = caught.response?.data?.message || caught.message || '操作失败'
     addLog(message, 'error')
     ElMessage.error(message)
   } finally {
-    busy.value = false
+    busyAction.value = ''
   }
 }
 
 function publishBatch() {
-  return run(() => axios.post('/api/sensor-simulator/publish-once', null, { params: { machineId: machineId.value } }), '已发送一组随机传感器数据')
+  return run('publishOnce', () => sensorSimulatorApi.publishOnce(machineId.value), '已发送一组随机传感器数据')
 }
 
 function publishCustom() {
-  return run(() => axios.post('/api/sensor-simulator/publish', { machineId: machineId.value, ...form }), '已发布自定义传感器数据')
+  Object.keys(formErrors).forEach(key => delete formErrors[key])
+  Object.assign(formErrors, validateSimulatorReading({ machineId: machineId.value, ...form }))
+  if (Object.keys(formErrors).length) return
+  return run('publishCustom', () => sensorSimulatorApi.publish({ machineId: machineId.value, ...form }), '已发布自定义传感器数据')
 }
 
 function start() {
-  return run(() => axios.post('/api/sensor-simulator/start', null, { params: { machineId: machineId.value } }), '已开启连续发送')
+  return run('start', () => sensorSimulatorApi.start(machineId.value), '已开启连续发送')
 }
 
 function stop() {
-  return run(() => axios.post('/api/sensor-simulator/stop'), '已停止连续发送')
+  return run('stop', () => sensorSimulatorApi.stop(), '已停止连续发送')
 }
 
 function formatTime(value) {

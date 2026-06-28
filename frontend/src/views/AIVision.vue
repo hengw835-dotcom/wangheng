@@ -7,7 +7,7 @@
         <div>
           <span class="eyebrow">AI VISION</span>
           <h1>视觉识别</h1>
-          <p>上传田间或农机图片，调用后端 `/ai-vision/detect` 接口返回识别结果。</p>
+          <p>上传田间或农机图片，调用真实后端 `/ai-vision/detect`，并按后端像素坐标绘制检测框。</p>
         </div>
         <div class="mode-card" :class="visionMode">
           <strong>{{ capabilityLabel(visionMode) }}</strong>
@@ -21,26 +21,35 @@
         type="warning"
         :closable="false"
         show-icon
-        title="当前后端视觉识别仍是演示模式，返回结果不能作为真实模型精度依据。"
+        title="当前后端视觉识别仍可能是演示模式，结果不能作为真实模型精度依据。"
       />
 
       <section class="content-grid">
         <article class="panel upload-panel">
           <header>
             <h2>图片识别</h2>
-            <el-button type="primary" :loading="loading" :disabled="!selectedFile" @click="detect">开始识别</el-button>
+            <el-button type="primary" :loading="loading" :disabled="!selectedFile || Boolean(fileError)" @click="detect">开始识别</el-button>
           </header>
 
           <label class="upload-box">
-            <input type="file" accept="image/*" @change="selectFile" />
+            <input type="file" accept="image/jpeg,image/png,image/webp" @change="selectFile" />
             <template v-if="previewUrl">
-              <img :src="previewUrl" alt="待识别图片" />
+              <img ref="previewImage" :src="previewUrl" alt="待识别图片" @load="captureImageSize" />
+              <span
+                v-for="(item, index) in results"
+                :key="index"
+                class="detection-box"
+                :style="boxStyle(item)"
+              >
+                {{ readableLabel(item.label) }} {{ Math.round(Number(item.confidence || 0) * 100) }}%
+              </span>
             </template>
             <template v-else>
               <strong>选择图片</strong>
-              <span>支持 jpg、png、webp，用于调用后端识别接口</span>
+              <span>支持 JPG、PNG、WebP，最大 10MB</span>
             </template>
           </label>
+          <p v-if="fileError" class="error-text">{{ fileError }}</p>
         </article>
 
         <article class="panel result-panel">
@@ -60,33 +69,27 @@
             </article>
           </div>
         </article>
-
-        <article class="panel note-panel">
-          <header><h2>真实落地要求</h2></header>
-          <ul>
-            <li>接入真实模型：YOLOv8/RT-DETR/自训练作物与障碍物检测模型。</li>
-            <li>后端推理服务需要返回模型版本、置信度、类别、框坐标和处理耗时。</li>
-            <li>生产环境需要保存识别记录，便于追溯图片、设备和任务。</li>
-            <li>当前页面已经预留真实接口调用，不再展示前端伪造识别目标。</li>
-          </ul>
-        </article>
       </section>
     </main>
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
-import axios from 'axios'
+import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import TopNavBar from '../components/layout/TopNavBar.vue'
 import { useSystemStore } from '../store'
+import { aiVisionApi } from '../services/api'
+import { normalizeDetectionBox, validateAiImage } from '../utils/analyticsModel'
 
 const systemStore = useSystemStore()
 const selectedFile = ref(null)
 const previewUrl = ref('')
 const results = ref([])
 const loading = ref(false)
+const fileError = ref('')
+const previewImage = ref(null)
+const imageSize = reactive({ width: 1, height: 1 })
 
 const visionMode = computed(() => systemStore.capabilities.aiVision || 'unknown')
 const modeDescription = computed(() => {
@@ -101,21 +104,29 @@ function capabilityLabel(mode) {
 }
 
 function selectFile(event) {
-  const file = event.target.files?.[0]
-  selectedFile.value = file || null
+  const file = event.target.files?.[0] || null
+  fileError.value = validateAiImage(file)
+  selectedFile.value = fileError.value ? null : file
   results.value = []
   if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
-  previewUrl.value = file ? URL.createObjectURL(file) : ''
+  previewUrl.value = file && !fileError.value ? URL.createObjectURL(file) : ''
+}
+
+function captureImageSize() {
+  imageSize.width = previewImage.value?.naturalWidth || 1
+  imageSize.height = previewImage.value?.naturalHeight || 1
+}
+
+function boxStyle(item) {
+  const box = normalizeDetectionBox(item, imageSize)
+  return { left: `${box.left}%`, top: `${box.top}%`, width: `${box.width}%`, height: `${box.height}%` }
 }
 
 async function detect() {
   if (!selectedFile.value) return
   loading.value = true
   try {
-    const body = new FormData()
-    body.append('image', selectedFile.value)
-    const { data } = await axios.post('/api/ai-vision/detect', body)
-    results.value = Array.isArray(data) ? data : []
+    results.value = await aiVisionApi.detect(selectedFile.value)
     ElMessage.success('识别请求已完成')
   } finally {
     loading.value = false
@@ -123,13 +134,13 @@ async function detect() {
 }
 
 function readableLabel(label) {
-  const text = String(label || '')
-  if (text.includes('浣滅墿')) return '作物'
-  if (text.includes('闅')) return '障碍物'
-  return text || '未知目标'
+  return String(label || '未知目标')
 }
 
 onMounted(() => systemStore.checkHealth())
+onBeforeUnmount(() => {
+  if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
+})
 </script>
 
 <style scoped>
@@ -139,20 +150,20 @@ onMounted(() => systemStore.checkHealth())
 .page-head { margin-bottom: 16px; }
 .eyebrow { color: #36c2ff; font-size: 12px; letter-spacing: .16em; }
 h1 { margin-top: 8px; color: #fff; font-size: 34px; }
-p, span, small, li { color: var(--app-text-muted); }
+p, span, small { color: var(--app-text-muted); }
 .mode-card { min-width: 220px; padding: 14px; border: 1px solid rgba(255,211,122,.35); border-radius: 14px; background: rgba(255,211,122,.08); }
 .mode-card.real { border-color: rgba(34,217,131,.35); background: rgba(34,217,131,.08); }
 .mode-card strong, .panel h2 { display: block; color: #fff; }
 .mode-alert { margin-bottom: 16px; }
 .content-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, .8fr); gap: 16px; }
 .panel { padding: 18px; border: 1px solid var(--app-panel-border); border-radius: 16px; background: var(--app-panel-bg); }
-.note-panel { grid-column: 1 / -1; }
-.upload-box { min-height: 420px; display: grid; place-items: center; gap: 10px; text-align: center; border: 1px dashed rgba(66,137,199,.42); border-radius: 14px; background: rgba(3,16,29,.4); cursor: pointer; overflow: hidden; }
+.upload-box { position: relative; min-height: 460px; display: grid; place-items: center; gap: 10px; text-align: center; border: 1px dashed rgba(66,137,199,.42); border-radius: 14px; background: rgba(3,16,29,.4); cursor: pointer; overflow: hidden; }
 .upload-box input { display: none; }
 .upload-box img { width: 100%; height: 100%; object-fit: contain; }
+.detection-box { position: absolute; display: flex; align-items: flex-start; justify-content: center; min-width: 64px; min-height: 34px; padding: 3px 6px; border: 2px solid #22d983; color: #fff; background: rgba(1, 22, 18, .35); font-size: 12px; text-shadow: 0 1px 2px rgba(0,0,0,.75); }
 .result-list { display: grid; gap: 12px; }
 .result-list article { padding: 14px; border-radius: 12px; background: rgba(3,16,29,.42); }
 .result-list strong { display: block; color: #fff; margin-bottom: 4px; }
-.note-panel ul { display: grid; gap: 10px; padding-left: 18px; line-height: 1.7; }
+.error-text { color: #ff9ca5; margin-top: 10px; }
 @media (max-width: 1100px) { .content-grid { grid-template-columns: 1fr; } .page-head { flex-direction: column; align-items: stretch; } }
 </style>
