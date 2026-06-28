@@ -19,8 +19,8 @@ let chart
 const option = computed(() => ({
   tooltip: {
     trigger: 'axis',
-    backgroundColor: '#0d2130',
-    borderColor: '#28495c',
+    backgroundColor: 'rgba(10, 28, 42, .96)',
+    borderColor: '#2c5363',
     textStyle: { color: '#d8eaea' }
   },
   legend: {
@@ -28,14 +28,14 @@ const option = computed(() => ({
     top: 0,
     textStyle: { color: '#7c98a3', fontSize: 10 }
   },
-  grid: { left: 38, right: 12, top: 30, bottom: 24 },
+  grid: { left: 38, right: 14, top: 32, bottom: 24 },
   xAxis: {
     type: 'category',
     data: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
     boundaryGap: false,
-    axisLine: { lineStyle: { color: '#274353' } },
+    axisLine: { lineStyle: { color: '#294758' } },
     axisLabel: { color: '#9eb0c0', fontSize: 10 },
-    splitLine: { lineStyle: { color: 'rgba(114,158,169,.09)' } }
+    splitLine: { lineStyle: { color: 'rgba(114,158,169,.08)' } }
   },
   yAxis: {
     type: 'value',
@@ -43,7 +43,7 @@ const option = computed(() => ({
     nameTextStyle: { color: '#9eb0c0', fontSize: 10 },
     axisLine: { lineStyle: { color: '#274353' } },
     axisLabel: { color: '#9eb0c0', fontSize: 10 },
-    splitLine: { lineStyle: { color: 'rgba(114,158,169,.12)' } }
+    splitLine: { lineStyle: { color: 'rgba(114,158,169,.11)' } }
   },
   series: [
     {
@@ -53,8 +53,8 @@ const option = computed(() => ({
       symbol: 'circle',
       symbolSize: 5,
       data: props.today,
-      lineStyle: { color: '#55d987', width: 3 },
-      itemStyle: { color: '#55d987' },
+      lineStyle: { color: '#5ee48f', width: 3 },
+      itemStyle: { color: '#5ee48f' },
       areaStyle: {
         color: {
           type: 'linear',
@@ -63,7 +63,7 @@ const option = computed(() => ({
           x2: 0,
           y2: 1,
           colorStops: [
-            { offset: 0, color: 'rgba(79,215,131,.28)' },
+            { offset: 0, color: 'rgba(94,228,143,.24)' },
             { offset: 1, color: 'rgba(79,215,131,0)' }
           ]
         }
@@ -76,7 +76,7 @@ const option = computed(() => ({
       symbol: 'circle',
       symbolSize: 4,
       data: props.yesterday,
-      lineStyle: { color: '#3b82f6', width: 3 },
+      lineStyle: { color: '#4b9cff', width: 2.5 },
       itemStyle: { color: '#3b82f6' }
     }
   ]

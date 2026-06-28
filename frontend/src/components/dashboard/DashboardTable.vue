@@ -41,15 +41,26 @@ function rowKey(row) {
 
 th,
 td {
-  height: 31px;
-  border-bottom: 1px solid rgba(92, 127, 154, .18);
-  color: #b9c8d5;
+  height: 33px;
+  border-bottom: 1px solid rgba(102, 131, 155, .14);
+  color: #c4d3df;
   text-align: left;
 }
 
 th {
-  color: #879aaa;
-  font-weight: 500;
+  height: 30px;
+  color: #8da1b2;
+  background: rgba(144, 163, 184, .06);
+  font-weight: 650;
+}
+
+td:first-child,
+th:first-child {
+  padding-left: 10px;
+}
+
+tbody tr:hover td {
+  background: rgba(38, 225, 160, .045);
 }
 
 .empty-cell {

@@ -200,7 +200,7 @@ function lngLatToTile(lng, lat, zoom) {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background: #0f1b17;
+  background: #101b18;
 }
 
 .satellite-layer {
@@ -216,10 +216,10 @@ function lngLatToTile(lng, lat, zoom) {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(26deg, rgba(255,255,255,.06) 1px, transparent 1px) 0 0/76px 48px,
-    linear-gradient(116deg, rgba(255,255,255,.04) 1px, transparent 1px) 0 0/92px 60px,
-    radial-gradient(circle at 50% 52%, rgba(13, 54, 33, .04), rgba(3, 11, 10, .34) 70%),
-    rgba(3, 13, 12, .18);
+    linear-gradient(26deg, rgba(255,255,255,.045) 1px, transparent 1px) 0 0/76px 48px,
+    linear-gradient(116deg, rgba(255,255,255,.03) 1px, transparent 1px) 0 0/92px 60px,
+    radial-gradient(circle at 52% 48%, rgba(16, 86, 45, .03), rgba(2, 10, 10, .38) 72%),
+    rgba(3, 13, 12, .12);
   pointer-events: none;
 }
 
@@ -227,7 +227,7 @@ function lngLatToTile(lng, lat, zoom) {
   position: absolute;
   display: block;
   object-fit: cover;
-  filter: saturate(1.18) contrast(1.08) brightness(.82);
+  filter: saturate(1.08) contrast(1.06) brightness(.9);
 }
 
 .satellite-credit {
@@ -261,15 +261,16 @@ button {
 
 .map-controls label,
 .map-controls button {
-  height: 32px;
+  height: 34px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 0 12px;
-  border: 1px solid rgba(85, 130, 152, .45);
-  border-radius: 4px;
-  color: #b9c8d5;
-  background: rgba(7, 19, 29, .8);
+  border: 1px solid rgba(127, 156, 180, .32);
+  border-radius: 7px;
+  color: #d2dee9;
+  background: rgba(7, 19, 29, .82);
+  box-shadow: inset 0 1px rgba(255,255,255,.04);
 }
 
 .map-controls input {
@@ -287,9 +288,10 @@ button {
 }
 
 .boundary {
-  fill: rgba(56, 211, 91, .18);
-  stroke: #23e56e;
-  stroke-width: 2;
+  fill: rgba(51, 199, 95, .14);
+  stroke: rgba(91, 255, 144, .88);
+  stroke-width: 2.2;
+  filter: drop-shadow(0 0 4px rgba(47, 230, 110, .45));
 }
 
 .cyan-route,
@@ -300,9 +302,9 @@ button {
   stroke-dasharray: 9 8;
 }
 
-.cyan-route { stroke: #20d9e9; }
-.yellow-route { stroke: #f5d719; }
-.green-route { stroke: #4ade80; }
+.cyan-route { stroke: #22d3ee; filter: drop-shadow(0 0 4px rgba(34, 211, 238, .45)); }
+.yellow-route { stroke: #facc15; filter: drop-shadow(0 0 4px rgba(250, 204, 21, .35)); }
+.green-route { stroke: #4ade80; filter: drop-shadow(0 0 4px rgba(74, 222, 128, .38)); }
 .route-node { fill: #07131e; stroke: #4ade80; stroke-width: 4; }
 
 .field-block {
@@ -310,11 +312,13 @@ button {
   z-index: 2;
   display: grid;
   place-items: center;
-  color: #d5ffe4;
-  border: 2px solid rgba(41, 214, 96, .8);
-  background: rgba(48, 168, 80, .22);
-  font-size: 16px;
+  color: #e4fff0;
+  border: 1px solid rgba(83, 255, 146, .72);
+  background: rgba(30, 129, 66, .18);
+  font-size: 15px;
+  font-weight: 650;
   line-height: 1.4;
+  text-shadow: 0 1px 3px rgba(0,0,0,.65);
 }
 
 .map-checks {
@@ -322,12 +326,14 @@ button {
   z-index: 6;
   left: 16px;
   top: 96px;
-  width: 112px;
+  width: 118px;
   display: grid;
-  gap: 10px;
+  gap: 9px;
   padding: 12px;
-  border-radius: 6px;
-  background: rgba(8, 24, 36, .8);
+  border: 1px solid rgba(127, 156, 180, .22);
+  border-radius: 8px;
+  background: rgba(8, 24, 36, .84);
+  box-shadow: 0 12px 28px rgba(0,0,0,.22);
 }
 
 .map-checks label {
@@ -363,10 +369,18 @@ button {
   display: grid;
   place-items: center;
   color: #d9e8f4;
-  border: 1px solid rgba(108, 145, 170, .4);
-  border-radius: 4px;
-  background: rgba(6, 18, 29, .82);
+  border: 1px solid rgba(127, 156, 180, .32);
+  border-radius: 7px;
+  background: rgba(6, 18, 29, .84);
   font-size: 12px;
+  box-shadow: inset 0 1px rgba(255,255,255,.04);
+}
+
+.map-tools button:hover,
+.map-controls button:hover {
+  color: #eafff7;
+  border-color: rgba(60, 226, 159, .48);
+  background: rgba(16, 50, 49, .88);
 }
 
 .machine-pin {
@@ -380,10 +394,11 @@ button {
 
 .machine-pin span {
   padding: 3px 8px;
-  border-radius: 4px;
+  border-radius: 5px;
   color: #fff;
   background: #0b72d9;
   font-size: 12px;
+  box-shadow: 0 8px 18px rgba(0,0,0,.24);
 }
 
 .machine-pin i {
@@ -408,12 +423,13 @@ button {
   z-index: 8;
   right: 90px;
   bottom: 72px;
-  width: 245px;
-  padding: 14px;
-  border: 1px solid #20e17c;
+  width: 260px;
+  padding: 15px;
+  border: 1px solid rgba(67, 255, 157, .7);
   border-radius: 8px;
-  background: rgba(7, 34, 25, .9);
-  box-shadow: 0 0 24px rgba(34, 226, 136, .16);
+  background: rgba(7, 28, 25, .92);
+  box-shadow: 0 20px 42px rgba(0,0,0,.28), 0 0 24px rgba(34, 226, 136, .14);
+  backdrop-filter: blur(8px);
 }
 
 .machine-card header {
@@ -469,9 +485,10 @@ button {
   display: flex;
   gap: 18px;
   padding: 8px 12px;
-  border-radius: 5px;
+  border: 1px solid rgba(127, 156, 180, .18);
+  border-radius: 7px;
   color: #b9c8d5;
-  background: rgba(8, 24, 36, .78);
+  background: rgba(8, 24, 36, .82);
 }
 
 .legend i {
