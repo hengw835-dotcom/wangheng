@@ -5,7 +5,9 @@ import store from './store'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import './styles/variables.css'
+import './styles/cockpit-tokens.css'
 import './styles/global.css'
+import './styles/cockpit.css'
 import './styles/animations.css'
 
 const app = createApp(App)

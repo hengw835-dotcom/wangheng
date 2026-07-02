@@ -1,0 +1,70 @@
+:root {
+  --yh-bg-page: #03101d;
+  --yh-bg-radial: radial-gradient(circle at 50% -20%, rgba(35, 140, 255, 0.24), transparent 38%);
+  --yh-bg-panel: linear-gradient(180deg, rgba(9, 30, 50, 0.94), rgba(4, 18, 32, 0.96));
+  --yh-bg-panel-strong: rgba(7, 25, 42, 0.96);
+  --yh-bg-elevated: #07192a;
+
+  --yh-color-primary: #2f8cff;
+  --yh-color-cyan: #35d6ff;
+  --yh-color-green: #45d483;
+  --yh-color-amber: #f6c85f;
+  --yh-color-red: #ff6b6b;
+  --yh-color-purple: #9b7cff;
+
+  --yh-text-primary: #f4f9ff;
+  --yh-text-secondary: #dcecff;
+  --yh-text-muted: #9eb6cf;
+  --yh-text-disabled: rgba(158, 182, 207, 0.48);
+
+  --yh-border-subtle: rgba(91, 166, 219, 0.16);
+  --yh-border-panel: rgba(91, 166, 219, 0.34);
+  --yh-border-glow: rgba(53, 214, 255, 0.42);
+  --yh-grid-line: rgba(91, 166, 219, 0.12);
+
+  --yh-status-success-text: #85f0ad;
+  --yh-status-success-bg: rgba(69, 212, 131, 0.13);
+  --yh-status-success-border: rgba(69, 212, 131, 0.42);
+  --yh-status-warning-text: #ffe08a;
+  --yh-status-warning-bg: rgba(246, 200, 95, 0.13);
+  --yh-status-warning-border: rgba(246, 200, 95, 0.42);
+  --yh-status-danger-text: #ff9a9a;
+  --yh-status-danger-bg: rgba(255, 107, 107, 0.14);
+  --yh-status-danger-border: rgba(255, 107, 107, 0.46);
+  --yh-status-info-text: #b9d7ff;
+  --yh-status-info-bg: rgba(47, 140, 255, 0.12);
+  --yh-status-info-border: rgba(47, 140, 255, 0.36);
+  --yh-status-offline-text: #b8c1cc;
+  --yh-status-offline-bg: rgba(127, 143, 164, 0.12);
+  --yh-status-offline-border: rgba(127, 143, 164, 0.32);
+  --yh-status-stale-text: #d7b8ff;
+  --yh-status-stale-bg: rgba(155, 124, 255, 0.12);
+  --yh-status-stale-border: rgba(155, 124, 255, 0.36);
+
+  --yh-font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+  --yh-font-digital: 'DIN Alternate', Bahnschrift, 'Roboto Mono', Consolas, monospace;
+  --yh-font-size-title: 22px;
+  --yh-font-size-section: 16px;
+  --yh-font-size-kpi: 28px;
+  --yh-font-size-body: 14px;
+  --yh-font-size-small: 12px;
+  --yh-font-size-tag: 12px;
+  --yh-line-height-body: 1.5;
+
+  --yh-space-1: 4px;
+  --yh-space-2: 8px;
+  --yh-space-3: 12px;
+  --yh-space-4: 16px;
+  --yh-space-5: 20px;
+  --yh-space-6: 24px;
+  --yh-space-8: 32px;
+
+  --yh-radius-sm: 6px;
+  --yh-radius-md: 10px;
+  --yh-radius-lg: 16px;
+  --yh-radius-pill: 999px;
+
+  --yh-shadow-panel: 0 16px 36px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --yh-shadow-glow: 0 0 22px rgba(53, 214, 255, 0.16);
+  --yh-shadow-danger: 0 0 22px rgba(255, 107, 107, 0.16);
+}

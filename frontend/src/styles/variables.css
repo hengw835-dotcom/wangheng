@@ -28,3 +28,21 @@
   --gap: 10px;
   --radius: 10px;
 }
+
+:root {
+  --bg-primary: var(--yh-bg-page, #0a1628);
+  --bg-secondary: var(--yh-bg-elevated, #0d1f3c);
+  --bg-card: var(--yh-bg-panel-strong, rgba(10, 22, 40, 0.85));
+  --border-card: var(--yh-border-panel, rgba(0, 212, 255, 0.15));
+  --border-highlight: var(--yh-border-glow, rgba(0, 212, 255, 0.4));
+  --color-cyan: var(--yh-color-cyan, #00d4ff);
+  --color-blue: var(--yh-color-primary, #0066ff);
+  --color-gold: var(--yh-color-amber, #ffd700);
+  --color-green: var(--yh-color-green, #00ff88);
+  --color-red: var(--yh-color-red, #ff4757);
+  --text-primary: var(--yh-text-primary, #ffffff);
+  --text-secondary: var(--yh-text-secondary, rgba(255, 255, 255, 0.7));
+  --text-muted: var(--yh-text-muted, rgba(255, 255, 255, 0.4));
+  --font-family: var(--yh-font-family, 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', sans-serif);
+  --font-digital: var(--yh-font-digital, 'DIN Alternate', 'Courier New', monospace);
+}
