@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="integrated-view">
+  <div class="integrated-view yh-cockpit">
     <!-- 椤堕儴瀵艰埅鏍?-->
     <div class="top-nav">
       <div class="nav-left">

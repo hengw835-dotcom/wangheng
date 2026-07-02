@@ -1,5 +1,5 @@
 <template>
-  <div class="screen">
+  <div class="screen yh-cockpit">
     <aside class="sidebar">
       <button class="brand" type="button" @click="router.push('/')">
         <span class="leaf-mark"></span>
