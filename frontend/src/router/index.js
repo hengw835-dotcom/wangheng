@@ -1,6 +1,12 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import { resolveDefaultRouteForViewport } from './mobile-routing.js'
 
 const routes = [
+  {
+    path: '/mobile',
+    name: 'MobileDashboard',
+    component: () => import('../views/MobileDashboard.vue')
+  },
   {
     path: '/',
     name: 'Dashboard',
@@ -60,6 +66,10 @@ const routes = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes
+})
+
+router.beforeEach(to => {
+  if (to.path === '/' && resolveDefaultRouteForViewport() === '/mobile') return '/mobile'
 })
 
 export default router
