@@ -1,4 +1,4 @@
-﻿# Free Demo Deployment Design
+# Free Demo Deployment Design
 
 ## Goal
 Provide a zero-cost public demo deployment path for the Smart Harvester system without requiring the user to buy a server.
